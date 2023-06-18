@@ -9,7 +9,6 @@ class UserSession:
         self.session = session
         self.user_id = user_id
 
-
     def add_connection(self, book_id):
         user = self.session.query(User).get(self.user_id)
         book = self.session.query(Book).get(book_id)
@@ -47,14 +46,22 @@ class UserSession:
         print(f"Opening book: {book.title}")
         return BookSession(self.session, book_id, self.user_id)
 
-    def get_connections(self):
-        return self.session.query(Connection).all()
-
-    def get_user_connections(self):
-        return self.session.query(Connection).filter_by(user_id=self.user_id).all()
-
     def get_user_books(self):
         return self.session.query(Book).join(Connection).filter(Connection.user_id == self.user_id).all()
 
+    def get_other_books(self):
+        return self.session.query(Book).join(Connection).filter(Connection.user_id != self.user_id).all()
+
     def get_user_quotes(self):
         return self.session.query(Quote).filter_by(user_id=self.user_id).all()
+
+    def remove_quotes(self, quote_id):
+        quote = self.session.query(Quote).get(quote_id)
+
+        if quote is None:
+            print(f"Quote with ID {quote_id} does not exist.")
+            return
+
+        self.session.delete(quote)
+        self.session.commit()
+        print("Quote removed.")
