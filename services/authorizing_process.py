@@ -1,4 +1,4 @@
-from database_setup import User
+from scripts.run_setup import User
 
 
 class AuthorizingProcess:
@@ -6,10 +6,10 @@ class AuthorizingProcess:
         self.session = session
 
     def create_new_account(self, username, password):
-        if self.session.query(User).filter_by(username=username).first():
+        if self.session.query(User).filter_by(name=username).first():
             return "Username already exists"
 
-        new_user = User(username=username)
+        new_user = User(name=username)
         new_user.set_password(password)
 
         self.session.add(new_user)
@@ -18,7 +18,7 @@ class AuthorizingProcess:
         return "Account created successfully"
 
     def log_in(self, username, password):
-        user = self.session.query(User).filter_by(username=username).first()
+        user = self.session.query(User).filter_by(name=username).first()
 
         if user and user.check_password(password):
             return "Login successful"

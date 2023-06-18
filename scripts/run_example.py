@@ -1,65 +1,80 @@
+from asyncio import sleep
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from services import user_session
-from services.database_setup import User, Book
+from run_setup import User, Book, Connection
 from services.user_session import UserSession
+from services.authorizing_process import AuthorizingProcess
 
 
 def main():
     # here is a flow of the program
-    engine = create_engine('sqlite:///app.db')
+    engine = create_engine('sqlite:///../database/app.db')
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    user1 = User(name='John', password='password1')
-    user2 = User(name='Alice', password='password2')
-    session.add(user1)
-    session.add(user2)
+    authorizing_process = AuthorizingProcess(session)
+    authorizing_process.create_new_account('John', 'password1')
+    authorizing_process.create_new_account('Alice', 'password2')
+    print('Accounts created')
+    print()
 
-    book1 = Book(title='Book 1', author='Author 1', path="../data/The_Little_Mermaid-Hans_Andersen.epub",
-                 description='Description 1')
-    book2 = Book(title='Book 2', author='Author 2', path="../data/The_Little_Mermaid-Hans_Andersen.epub",
-                 description='Description 2')
-    session.add(book1)
-    session.add(book2)
+    if authorizing_process.log_in('John', 'password1') == 'Login successful':
+        print('John logged in')
+        user_session = UserSession(session, session.query(User).filter_by(name='John').first().id)
+    else:
+        return
+    print()
 
-    # start GUI
-    # when the user logs in, we get his name.
-    user_id = session.query(User).filter_by(name='John').first().id
-    print(user_id)
-    user_session = UserSession(session, user_id)
+    print('John added some books:')
+    user_session.add_connection(book_id=3)
+    user_session.add_connection(book_id=5)
+    user_session.add_connection(book_id=1)
+    print()
 
-    # 1. opens settings: nothing to be implemented using backend
+    # below all the sorting methods go
+    books = user_session.get_user_books(sort_by=Book.title)
+    books = user_session.get_user_books(sort_by=Book.title.desc())
+    books = user_session.get_user_books(sort_by=Book.author)
+    books = user_session.get_user_books(sort_by=Book.author.desc())
+    books = user_session.get_user_books(sort_by=Connection.date_added)
+    books = user_session.get_user_books(sort_by=Connection.date_added.desc())
 
-    # 2. opens all books:
-    #   - gets a list of all books: TODO: get all books from the database with markers added or not
-    #   - removes and adds books: session.remove_connection() and session.add_connection()
-    #   - gets a description of a book() TODO: get a description of a book
+    print("Here are the Johns books:")
+    for book in books:
+        print(book.title)
+    print()
 
-    # 3. opens his books:
-    #   - gets a list of all his books: session.get_user_books()
-    #   - removes and adds books: session.remove_connection() and session.add_connection()
-    #   - opens a book in added_books: book_session.py. here he can scroll pages, add a quote, use the modules
+    # filtering by a title:
+    print("Here are the Johns books (filtered):")
+    books = user_session.get_user_books(sort_by=Book.title, filter_by='Alice')
+    for book in books:
+        print(book.title)
+    print()
 
-    user_session.add_connection(book1.id)
-    book_session = user_session.open_book(book1.id)
-    for book in user_session.get_user_books():
-        print(book)
-        print()
+    print("Here are the books that John possibly wants to add:")
+    for book in user_session.get_other_books():
+        print(book.title)
+    print()
 
+    print("John opened a book:")
+    book_session = user_session.open_book(1)
     for page in book_session.book_pages:
         print(page)
         print()
 
-    # for book in user_session.get_all_books():
-    #     print(book)
-    #     print()
-
-    user_session.remove_connection(book1.id)
-
+    print("John adds quotes:")
     book_session.add_quote("This is a quote")
 
-    print(user_session.get_user_quotes())
+    book_session = user_session.open_book(3)
+
+    book_session.add_quote("This is a second quote")
+    book_session.add_quote("This is a third quote")
+    print()
+
+    print("Here are the quotes:")
+    for title, author, quote in user_session.get_user_quotes():
+        print(quote + " - " + title + " by " + author)
 
 
 main()
