@@ -1,3 +1,6 @@
+from datetime import datetime
+
+from services.book_session import BookSession
 from services.database_setup import Book, Connection, Quote, User
 
 
@@ -19,7 +22,7 @@ class UserSession:
             print(f"Book with ID {book_id} does not exist.")
             return
 
-        connection = Connection(user=user, book=book)
+        connection = Connection(user=user, book=book, date_added=datetime.now(), page_number=0)
         self.session.add(connection)
         self.session.commit()
         print(f"Connection added: User {user.name} <-> Book {book.title}")
@@ -34,6 +37,15 @@ class UserSession:
         self.session.delete(connection)
         self.session.commit()
         print("Connection removed.")
+
+    def open_book(self, book_id):
+        book = self.session.query(Book).get(book_id)
+        if book is None:
+            print(f"Book with ID {book_id} does not exist.")
+            return
+
+        print(f"Opening book: {book.title}")
+        return BookSession(self.session, book_id, self.user_id)
 
     def get_connections(self):
         return self.session.query(Connection).all()

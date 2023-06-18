@@ -1,6 +1,10 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, sessionmaker
+
+engine = create_engine('sqlite:///app.db')
+Session = sessionmaker(bind=engine)
+session = Session()
 
 Base = declarative_base()
 
