@@ -14,12 +14,7 @@ class StartMainWindow(QMainWindow):
         self.buttons()
 
     def buttons(self):
-        self.ui.ExitButton.setCheckable(True)
-        self.ui.FavoriteButton.clicked.connect(self.openFav())
-
-    def openFav(self):
-        window=FavouriteMainWindow()
-        window.show()
+        self.ui.FavoriteButton.clicked.connect(self.ui_fav.show)
 
 
 class FavouriteMainWindow(QMainWindow):
