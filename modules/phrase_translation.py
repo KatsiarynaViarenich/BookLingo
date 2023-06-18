@@ -7,4 +7,5 @@ class PhraseTranslation:
 
     def get_translation(self, phrase):
         translation = self.translator.translate(phrase, src='en', dest='pl')
+        print(translation)
         return translation.text
