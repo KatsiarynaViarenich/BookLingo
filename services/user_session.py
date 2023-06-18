@@ -1,22 +1,11 @@
 from services.database_setup import Book, Connection, Quote, User
 
 
-class Session:
-    def __init__(self, engine, user_id):
-        self.engine = engine
-        self.session = None
+class UserSession:
+    def __init__(self, session, user_id):
+        self.session = session
         self.user_id = user_id
 
-    def __enter__(self):
-        Session = sessionmaker(bind=self.engine)
-        self.session = Session()
-        return self.session
-
-    def __exit__(self, exc_type, exc_value, exc_traceback):
-        self.session.close()
-        self.session = None
-        self.user_id = None
-        return False
 
     def add_connection(self, book_id):
         user = self.session.query(User).get(self.user_id)
