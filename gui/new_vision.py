@@ -40,78 +40,78 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabsClosable(False)
         self.tabWidget.setMovable(False)
         self.tabWidget.setTabBarAutoHide(True)
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.HelloQText = QTextEdit(self.tab)
+        self.tab_home = QWidget()
+        self.tab_home.setObjectName(u"home")
+        self.HelloQText = QTextEdit(self.tab_home)
         self.HelloQText.setReadOnly(True)
         self.HelloQText.setObjectName(u"HelloQText")
         self.HelloQText.setGeometry(QRect(110, 100, 571, 341))
         self.HelloQText.setAutoFillBackground(False)
         self.HelloQText.setStyleSheet(u"")
-        self.tabWidget.addTab(self.tab, "")
+        self.tabWidget.addTab(self.tab_home, "")
         self.tab_account = QWidget()
         self.tab_account.setObjectName(u"account page")
         self.tabWidget.addTab(self.tab_account, "")
-        self.tab_5 = QWidget()
-        self.tab_5.setObjectName(u"tab_5")
-        self.findFavoriteplainTextEdit = QPlainTextEdit(self.tab_5)
+        self.tab_fav = QWidget()
+        self.tab_fav.setObjectName(u"favourites")
+        self.findFavoriteplainTextEdit = QPlainTextEdit(self.tab_fav)
         self.findFavoriteplainTextEdit.setObjectName(u"findFavoriteplainTextEdit")
         self.findFavoriteplainTextEdit.setGeometry(QRect(70, 60, 651, 31))
         self.findFavoriteplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 "  box-shadow: none;")
-        self.FavoritelistView = QListView(self.tab_5)
+        self.FavoritelistView = QListView(self.tab_fav)
         self.FavoritelistView.setObjectName(u"FavoritelistView")
         self.FavoritelistView.setGeometry(QRect(70, 100, 651, 431))
         self.FavoritelistView.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;\n"
 "    box-shadow: none;")
-        self.FavoritetextEdit = QTextEdit(self.tab_5)
+        self.FavoritetextEdit = QTextEdit(self.tab_fav)
         self.FavoritetextEdit.setReadOnly(True)
         self.FavoritetextEdit.setObjectName(u"FavoritetextEdit")
         self.FavoritetextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.FavoritetextEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
-        self.tabWidget.addTab(self.tab_5, "")
-        self.tab_4 = QWidget()
-        self.tab_4.setObjectName(u"tab_4")
-        self.MyBookslistView = QListView(self.tab_4)
+        self.tabWidget.addTab(self.tab_fav, "")
+        self.tab_mybooks = QWidget()
+        self.tab_mybooks.setObjectName(u"my books")
+        self.MyBookslistView = QListView(self.tab_mybooks)
         self.MyBookslistView.setObjectName(u"MyBookslistView")
         self.MyBookslistView.setGeometry(QRect(70, 100, 651, 431))
         self.MyBookslistView.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;\n"
 "    box-shadow: none;")
-        self.findMyBookplainTextEdit = QPlainTextEdit(self.tab_4)
+        self.findMyBookplainTextEdit = QPlainTextEdit(self.tab_mybooks)
         self.findMyBookplainTextEdit.setObjectName(u"findMyBookplainTextEdit")
         self.findMyBookplainTextEdit.setGeometry(QRect(70, 60, 651, 31))
         self.findMyBookplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 "    box-shadow: none;")
-        self.MyBookstextEdit = QTextEdit(self.tab_4)
+        self.MyBookstextEdit = QTextEdit(self.tab_mybooks)
         self.MyBookstextEdit.setReadOnly(True)
         self.MyBookstextEdit.setObjectName(u"MyBookstextEdit")
         self.MyBookstextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.MyBookstextEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
-        self.tabWidget.addTab(self.tab_4, "")
-        self.tab_home = QWidget()
-        self.tab_home.setObjectName(u"home")
-        self.FoundBookslistView = QListView(self.tab_home)
+        self.tabWidget.addTab(self.tab_mybooks, "")
+        self.tab_find = QWidget()
+        self.tab_find.setObjectName(u"home")
+        self.FoundBookslistView = QListView(self.tab_find)
         self.FoundBookslistView.setObjectName(u"FoundBookslistView")
         self.FoundBookslistView.setGeometry(QRect(70, 100, 651, 431))
         self.FoundBookslistView.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;\n"
 "    box-shadow: none;")
-        self.FindBookstextEdit = QTextEdit(self.tab_home)
+        self.FindBookstextEdit = QTextEdit(self.tab_find)
         self.FindBookstextEdit.setReadOnly(True)
         self.FindBookstextEdit.setObjectName(u"FindBookstextEdit")
         self.FindBookstextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.FindBookstextEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
-        self.findFindBooksplainTextEdit = QPlainTextEdit(self.tab_home)
+        self.findFindBooksplainTextEdit = QPlainTextEdit(self.tab_find)
         self.findFindBooksplainTextEdit.setObjectName(u"findFindBooksplainTextEdit")
         self.findFindBooksplainTextEdit.setGeometry(QRect(70, 60, 651, 31))
         self.findFindBooksplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;")
-        self.tabWidget.addTab(self.tab_home, "")
+        self.tabWidget.addTab(self.tab_find, "")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -144,7 +144,7 @@ class Ui_MainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic; color:#000000;\">by Katsiaryna Viaernich and Vera Goriukhina</span></p></body></html>", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Home", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_home), QCoreApplication.translate("MainWindow", u"Home", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_account), QCoreApplication.translate("MainWindow", u"Account", None))
         self.FavoritetextEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
@@ -154,7 +154,7 @@ class Ui_MainWindow(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt; font-weight:700;\">Favourite</span></p></body></html>", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_5), QCoreApplication.translate("MainWindow", u"Favourites", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_fav), QCoreApplication.translate("MainWindow", u"Favourites", None))
         self.MyBookstextEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt; font-weight:700;\">My Books</span></p></body></html>", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_4), QCoreApplication.translate("MainWindow", u"My Books", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_mybooks), QCoreApplication.translate("MainWindow", u"My Books", None))
         self.FindBookstextEdit.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
@@ -172,6 +172,6 @@ class Ui_MainWindow(object):
 "li.checked::marker { content: \"\\2612\"; }\n"
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:18pt; font-weight:700;\">Library</span></p></body></html>", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_home), QCoreApplication.translate("MainWindow", u"Find", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_find), QCoreApplication.translate("MainWindow", u"Find", None))
     # retranslateUi
 

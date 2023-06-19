@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit,
     QListWidgetItem
 from Page import Ui_PageMainWindow
 from new_vision import Ui_MainWindow
+from scripts.run_load_data import main
 
 
 class MainWindow(QMainWindow):
@@ -21,6 +22,7 @@ class MainWindow(QMainWindow):
 
     def books_tab(self):
         curr_tab=self.ui.tabWidget.currentWidget()
+
 
 
 
