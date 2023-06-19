@@ -8,7 +8,7 @@ from services.authorizing_process import AuthorizingProcess
 
 def main():
     # here is a flow of the program
-    engine = create_engine('sqlite:///../database/app.db')
+    engine = create_engine('sqlite:///../data/app.db')
     Session = sessionmaker(bind=engine)
     session = Session()
 

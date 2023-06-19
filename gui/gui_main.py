@@ -22,17 +22,27 @@ class MainWindow(QMainWindow):
         self.ui_log.setupUi(self.ui_notloged)
         self.account_buttons()
 
+    def account(self):
+        if self.ui_log == self.ui_loged:
+            log_widget = QWidget(self.ui.tab_account)
+            self.ui_loged.setupUi(log_widget)
+        else:
+            log_widget = QWidget(self.ui.tab_account)
+            self.ui_notloged.setupUi(log_widget)
+
     def account_buttons(self):
         self.ui_notloged.LogInButton.clicked.connect(self.logIn)
         self.ui_loged.LogOutButton.clicked.connect(self.logOut)
 
     def logIn(self):
-        log_widget = QWidget(self.ui.tab_account)
-        self.ui_log.setupUi(log_widget)
+        self.ui_log = self.ui_notloged
+        self.ui_log = Ui_NotLogedMainWindow()  # Создаем новый экземпляр Ui_NotLogedMainWindow
+        self.ui_log.setupUi(self.ui.tab_account)
 
     def logOut(self):
-        log_widget = QWidget(self.ui.tab_account)
-        self.ui_log=self.ui_notloged
+        self.ui_log = self.ui_loged
+        self.ui_log = Ui_LogedQMainWindow()  # Создаем новый экземпляр Ui_LogedQMainWindow
+        self.ui_log.setupUi(self.ui.tab_account)
 
     def open_book(self):
         page_widget = QWidget()

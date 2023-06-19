@@ -22,6 +22,7 @@ class Ui_NotLogedMainWindow(object):
     def setupUi(self, NotLogedMainWindow):
         if not NotLogedMainWindow.objectName():
             NotLogedMainWindow.setObjectName(u"NotLogedMainWindow")
+        self.setObjectName(u"NotLogedMainWindow")
         NotLogedMainWindow.resize(800, 600)
         NotLogedMainWindow.setStyleSheet(u"background-color: #faf5ea;\n"
 "")

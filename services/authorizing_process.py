@@ -1,4 +1,4 @@
-from BookLingo.scripts.run_setup import User
+from scripts.run_setup import User
 
 
 class AuthorizingProcess:
