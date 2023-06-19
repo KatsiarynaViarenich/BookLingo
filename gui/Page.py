@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QFrame, QLineEdit, QMainWindow,
     QPushButton, QSizePolicy, QTextEdit, QWidget)
 
-class Ui_MainWindow(object):
+class Ui_PageMainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")

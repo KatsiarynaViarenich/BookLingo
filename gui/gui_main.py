@@ -24,7 +24,6 @@ class FavouriteMainWindow(QMainWindow):
         self.ui.setupUi(self)
         #self.buttons()
 
-
 if __name__ == "__main__":
     app = QApplication()
     window = StartMainWindow()

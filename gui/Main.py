@@ -16,7 +16,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QFrame, QMainWindow, QPushButton,
-    QSizePolicy, QTextEdit, QWidget)
+                               QSizePolicy, QTextEdit, QWidget, QTabWidget)
 
 class Ui_StartMainWindow(object):
     def setupUi(self, StartMainWindow):
@@ -25,13 +25,19 @@ class Ui_StartMainWindow(object):
         StartMainWindow.resize(800, 600)
         StartMainWindow.setStyleSheet(u"background-color: #faf5ea;\n"
 "   border: none;\n  box-shadow: none;")
-        self.centralwidget = QWidget(StartMainWindow)
+        self.centralwidget = QTabWidget(StartMainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.HelloQText = QTextEdit(self.centralwidget)
+        self.centralwidget.setTabPosition(QTabWidget.West)
+        self.helloWidget=QWidget()
+        self.HelloQText = QTextEdit(self.helloWidget)
         self.HelloQText.setObjectName(u"HelloQText")
-        self.HelloQText.setGeometry(QRect(140, 150, 571, 341))
+        self.HelloQText.setGeometry(QRect(110, 100, 571, 341))
         self.HelloQText.setAutoFillBackground(False)
         self.HelloQText.setStyleSheet(u"")
+        self.findWidget=QWidget()
+        self.centralwidget.addTab(self.helloWidget,"Home")
+        self.centralwidget.addTab(self.findWidget,"find")
+
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
         self.frame.setGeometry(QRect(0, 0, 71, 601))
@@ -67,6 +73,7 @@ class Ui_StartMainWindow(object):
         self.HelpButton = QPushButton(self.frame)
         self.HelpButton.setObjectName(u"HelpButton")
         self.HelpButton.setGeometry(QRect(0, 460, 71, 71))
+
         StartMainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(StartMainWindow)
@@ -96,6 +103,7 @@ class Ui_StartMainWindow(object):
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
 "<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">by Katsiaryna Viaernich and Vera Goriukhina</span></p></body></html>", None))
+
         self.KontoButton.setText(QCoreApplication.translate("StartMainWindow", u"L", None))
         self.MyBooksButton.setText(QCoreApplication.translate("StartMainWindow", u"MyBooks", None))
         self.FindButton.setText(QCoreApplication.translate("StartMainWindow", u"Find", None))
@@ -106,5 +114,6 @@ class Ui_StartMainWindow(object):
         self.HelpButton.setStyleSheet(QCoreApplication.translate("StartMainWindow", u"    border: none;\n"
 "    box-shadow: none;", None))
         self.HelpButton.setText(QCoreApplication.translate("StartMainWindow", u"Help", None))
+
     # retranslateUi
 
