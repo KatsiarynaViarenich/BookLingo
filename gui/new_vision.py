@@ -112,7 +112,6 @@ class Ui_MainWindow(object):
         self.findFindBooksplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;")
         self.tabWidget.addTab(self.tab_find, "")
-        MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
 
