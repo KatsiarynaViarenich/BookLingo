@@ -31,53 +31,7 @@ class Ui_PageMainWindow(object):
         self.AuthorNametextEdit.setObjectName(u"AuthorNametextEdit")
         self.AuthorNametextEdit.setGeometry(QRect(40, 0, 671, 31))
         self.AuthorNametextEdit.setStyleSheet(u" border: none;\n background-color: #f5e6c6;\n")
-        """
-        self.frame = QFrame(self.centralwidget)
-        self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(0, 0, 71, 601))
-        self.frame.setStyleSheet(u"background-color: #f5e6c6;\n"
-"")
-        self.frame.setFrameShape(QFrame.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Raised)
-        self.KontoButton_3 = QPushButton(self.frame)
-        self.KontoButton_3.setObjectName(u"KontoButton_3")
-        self.KontoButton_3.setGeometry(QRect(0, 0, 71, 71))
-        self.KontoButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-        icon = QIcon()
-        iconThemeName = u"user-desktop"
-        if QIcon.hasThemeIcon(iconThemeName):
-            icon = QIcon.fromTheme(iconThemeName)
-        else:
-            icon.addFile(u"../Python/Projects/venv/Lib/site-packages/PySide6", QSize(), QIcon.Normal, QIcon.Off)
 
-        self.KontoButton_3.setIcon(icon)
-        self.MyBooksButton_3 = QPushButton(self.frame)
-        self.MyBooksButton_3.setObjectName(u"MyBooksButton_3")
-        self.MyBooksButton_3.setGeometry(QRect(0, 140, 71, 71))
-        self.MyBooksButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-        self.FindButton_3 = QPushButton(self.frame)
-        self.FindButton_3.setObjectName(u"FindButton_3")
-        self.FindButton_3.setGeometry(QRect(0, 210, 71, 71))
-        self.FindButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-        self.FavoriteButton_3 = QPushButton(self.frame)
-        self.FavoriteButton_3.setObjectName(u"FavoriteButton_3")
-        self.FavoriteButton_3.setGeometry(QRect(0, 70, 71, 71))
-        self.FavoriteButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-        self.ExitButton_3 = QPushButton(self.frame)
-        self.ExitButton_3.setObjectName(u"ExitButton_3")
-        self.ExitButton_3.setGeometry(QRect(0, 530, 71, 71))
-        self.ExitButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-        self.HelpButton_3 = QPushButton(self.frame)
-        self.HelpButton_3.setObjectName(u"HelpButton_3")
-        self.HelpButton_3.setGeometry(QRect(0, 460, 71, 71))
-        self.HelpButton_3.setStyleSheet(u"    border: none;\n"
-"    box-shadow: none;")
-"""
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
         self.textEdit.setGeometry(QRect(70, 100, 651, 431))
@@ -154,6 +108,6 @@ class Ui_PageMainWindow(object):
         self.nextPageButton.setText(QCoreApplication.translate("MainWindow", u"->", None))
         self.prevPageButton.setText(QCoreApplication.translate("MainWindow", u"<-", None))
         self.PageslineEdit.setText(QCoreApplication.translate("MainWindow", u"page/page", None))
-        self.pushButton_3.setText(QCoreApplication.translate("MainWindow", u"Check understanding", None))
+        self.questionsButton.setText(QCoreApplication.translate("MainWindow", u"Check understanding", None))
     # retranslateUi
 
