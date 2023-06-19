@@ -43,6 +43,7 @@ class Ui_MainWindow(object):
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.HelloQText = QTextEdit(self.tab)
+        self.HelloQText.setReadOnly(True)
         self.HelloQText.setObjectName(u"HelloQText")
         self.HelloQText.setGeometry(QRect(110, 100, 571, 341))
         self.HelloQText.setAutoFillBackground(False)
@@ -65,6 +66,7 @@ class Ui_MainWindow(object):
 " border: none;\n"
 "    box-shadow: none;")
         self.FavoritetextEdit = QTextEdit(self.tab_5)
+        self.FavoritetextEdit.setReadOnly(True)
         self.FavoritetextEdit.setObjectName(u"FavoritetextEdit")
         self.FavoritetextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.FavoritetextEdit.setStyleSheet(u" border: none;\n"
@@ -84,6 +86,7 @@ class Ui_MainWindow(object):
         self.findMyBookplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 "    box-shadow: none;")
         self.MyBookstextEdit = QTextEdit(self.tab_4)
+        self.MyBookstextEdit.setReadOnly(True)
         self.MyBookstextEdit.setObjectName(u"MyBookstextEdit")
         self.MyBookstextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.MyBookstextEdit.setStyleSheet(u" border: none;\n"
@@ -98,6 +101,7 @@ class Ui_MainWindow(object):
 " border: none;\n"
 "    box-shadow: none;")
         self.FindBookstextEdit = QTextEdit(self.tab_2)
+        self.FindBookstextEdit.setReadOnly(True)
         self.FindBookstextEdit.setObjectName(u"FindBookstextEdit")
         self.FindBookstextEdit.setGeometry(QRect(50, 10, 671, 41))
         self.FindBookstextEdit.setStyleSheet(u" border: none;\n"
