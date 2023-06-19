@@ -34,13 +34,13 @@ class Ui_PageMainWindow(object):
 
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setGeometry(QRect(70, 100, 651, 431))
+        self.textEdit.setGeometry(QRect(70, 60, 651, 431))
         self.textEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none; background-color: #faf5ea;\n;  padding: 15px; ")
         self.textEdit.setFontPointSize(12)
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setGeometry(QRect(80, 560, 651, 41))
+        self.frame_2.setGeometry(QRect(70, 510, 651, 41))
         self.frame_2.setFrameShape(QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.nextPageButton = QPushButton(self.frame_2)
@@ -71,15 +71,15 @@ class Ui_PageMainWindow(object):
         self.prevPageButton.setIcon(icon2)
         self.PageslineEdit = QLineEdit(self.frame_2)
         self.PageslineEdit.setObjectName(u"PageslineEdit")
-        self.PageslineEdit.setGeometry(QRect(250, 10, 113, 21))
+        self.PageslineEdit.setGeometry(QRect(250, 15, 113, 21))
         self.PageslineEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none; background-color: #faf5ea;\n")
         self.questionsButton = QPushButton(self.centralwidget)
         self.questionsButton.setObjectName(u"pushButton_3")
-        self.questionsButton.setGeometry(QRect(280, 530, 181, 24))
+        self.questionsButton.setGeometry(QRect(280, 495, 181, 24))
         #self.questionsButton.set
         self.questionsButton.setStyleSheet(u" border: none;\n"
-"    box-shadow: none;")
+"    box-shadow: none;  font-size: 14px;")
         #MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)

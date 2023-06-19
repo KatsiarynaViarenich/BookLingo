@@ -3,8 +3,9 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QVBoxLayout, QWidget, \
     QListWidgetItem
 from Page import Ui_PageMainWindow
+from Loged import Ui_LogedQMainWindow
+from NotLoged import Ui_NotLogedMainWindow
 from new_vision import Ui_MainWindow
-from scripts.run_load_data import main
 
 
 class MainWindow(QMainWindow):
@@ -12,13 +13,31 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui_page=Ui_MainWindow()
+        self.ui_page=Ui_PageMainWindow()
         self.open_book()
 
-    def open_book(self,book):
+        self.ui_loged=Ui_LogedQMainWindow()
+        self.ui_notloged=Ui_NotLogedMainWindow()
+        self.ui_log =self.ui_notloged
+        self.ui_log.setupUi(self.ui_notloged)
+        self.account_buttons()
+
+    def account_buttons(self):
+        self.ui_notloged.LogInButton.clicked.connect(self.logIn)
+        self.ui_loged.LogOutButton.clicked.connect(self.logOut)
+
+    def logIn(self):
+        log_widget = QWidget(self.ui.tab_account)
+        self.ui_log.setupUi(log_widget)
+
+    def logOut(self):
+        log_widget = QWidget(self.ui.tab_account)
+        self.ui_log=self.ui_notloged
+
+    def open_book(self):
         page_widget = QWidget()
         self.ui_page.setupUi(page_widget)
-        self.ui.tabWidget.addTab(page_widget, "New Tab")
+        self.ui.tabWidget.addTab(page_widget, "Book's name")
 
     def books_tab(self):
         curr_tab=self.ui.tabWidget.currentWidget()
