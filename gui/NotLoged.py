@@ -22,7 +22,6 @@ class Ui_NotLogedMainWindow(object):
     def setupUi(self, NotLogedMainWindow):
         if not NotLogedMainWindow.objectName():
             NotLogedMainWindow.setObjectName(u"NotLogedMainWindow")
-        self.setObjectName(u"NotLogedMainWindow")
         NotLogedMainWindow.resize(800, 600)
         NotLogedMainWindow.setStyleSheet(u"background-color: #faf5ea;\n"
 "")
@@ -31,12 +30,12 @@ class Ui_NotLogedMainWindow(object):
 
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
-        self.textEdit.setGeometry(QRect(140, 200, 571, 71))
+        self.textEdit.setGeometry(QRect(110, 200, 571, 71))
         self.textEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setGeometry(QRect(140, 310, 571, 80))
+        self.frame_2.setGeometry(QRect(110, 310, 571, 80))
         self.frame_2.setFrameShape(QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QFrame.Raised)
         self.LogInButton = QPushButton(self.frame_2)

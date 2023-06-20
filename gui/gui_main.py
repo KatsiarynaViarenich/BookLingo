@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QVBoxLayout, QWidget, \
-    QListWidgetItem
+    QListWidgetItem, QMessageBox
 from Page import Ui_PageMainWindow
 from Loged import Ui_LogedQMainWindow
 from NotLoged import Ui_NotLogedMainWindow
@@ -20,6 +20,17 @@ class MainWindow(QMainWindow):
         self.ui_notloged=Ui_NotLogedMainWindow()
         self.ui_log=self.ui_notloged
         self.account_buttons()
+        self.ui.tabWidget.currentChanged.connect(self.open_tab)
+
+        self.ui.tabWidget.setCurrentIndex(0)
+
+    def open_tab(self, index):
+        if self.ui_log==self.ui_notloged:
+            if index not in [0, 1]:  # Индексы вкладок "Home" и "Account"
+                QMessageBox.warning(self, "Oops...", "user is not logged.\nGo to Accounts->Log In.")
+                self.ui.tabWidget.setCurrentIndex(0)
+            else:
+                self.ui.tabWidget.setCurrentIndex(index)
 
     def account_buttons(self):
         if self.ui_log == self.ui_loged:

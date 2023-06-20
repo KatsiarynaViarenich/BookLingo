@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
         self.HelloQText = QTextEdit(self.tab_home)
         self.HelloQText.setReadOnly(True)
         self.HelloQText.setObjectName(u"HelloQText")
-        self.HelloQText.setGeometry(QRect(110, 100, 571, 341))
+        self.HelloQText.setGeometry(QRect(100, 100, 571, 341))
         self.HelloQText.setAutoFillBackground(False)
         self.HelloQText.setStyleSheet(u"")
         self.tabWidget.addTab(self.tab_home, "")

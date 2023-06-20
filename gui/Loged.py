@@ -31,12 +31,12 @@ class Ui_LogedQMainWindow(object):
 
         self.HelloUserQTextEdit = QTextEdit(self.centralwidget)
         self.HelloUserQTextEdit.setObjectName(u"HelloUserQTextEdit")
-        self.HelloUserQTextEdit.setGeometry(QRect(140, 100, 551, 71))
+        self.HelloUserQTextEdit.setGeometry(QRect(120, 100, 551, 71))
         self.HelloUserQTextEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
         self.LogOutButton = QPushButton(self.centralwidget)
         self.LogOutButton.setObjectName(u"LogOutButton")
-        self.LogOutButton.setGeometry(QRect(260, 533, 291, 41))
+        self.LogOutButton.setGeometry(QRect(250, 480, 291, 41))
         self.LogOutButton.setStyleSheet(u"    border: none;\n"
 "    box-shadow: none; background-color: #f5e6c6;\n"
 "  font-size: 14px;")
