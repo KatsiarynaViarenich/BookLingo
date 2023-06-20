@@ -18,31 +18,36 @@ class MainWindow(QMainWindow):
 
         self.ui_loged=Ui_LogedQMainWindow()
         self.ui_notloged=Ui_NotLogedMainWindow()
-        self.ui_log =self.ui_notloged
-        self.ui_log.setupUi(self.ui_notloged)
+        self.ui_log=self.ui_notloged
         self.account_buttons()
 
-    def account(self):
-        if self.ui_log == self.ui_loged:
-            log_widget = QWidget(self.ui.tab_account)
-            self.ui_loged.setupUi(log_widget)
-        else:
-            log_widget = QWidget(self.ui.tab_account)
-            self.ui_notloged.setupUi(log_widget)
-
     def account_buttons(self):
-        self.ui_notloged.LogInButton.clicked.connect(self.logIn)
-        self.ui_loged.LogOutButton.clicked.connect(self.logOut)
+        if self.ui_log == self.ui_loged:
+            self.logIn()
+        else:
+            self.logOut()
 
     def logIn(self):
-        self.ui_log = self.ui_notloged
-        self.ui_log = Ui_NotLogedMainWindow()  # Создаем новый экземпляр Ui_NotLogedMainWindow
+        tab_index = 1  # Индекс целевой закладки
+        self.ui.tabWidget.removeTab(tab_index)
+        self.ui.tab_account=QWidget()
+        self.ui.tabWidget.insertTab(tab_index,self.ui.tab_account,"Account")
+        self.ui_log = self.ui_loged
         self.ui_log.setupUi(self.ui.tab_account)
+        self.ui_log.LogOutButton.clicked.connect(self.logOut)
+        self.ui.tabWidget.setCurrentIndex(tab_index)
 
     def logOut(self):
-        self.ui_log = self.ui_loged
-        self.ui_log = Ui_LogedQMainWindow()  # Создаем новый экземпляр Ui_LogedQMainWindow
+        tab_index=1
+        self.ui.tabWidget.removeTab(tab_index)
+        self.ui.tab_account=QWidget()
+        self.ui.tabWidget.insertTab(tab_index,self.ui.tab_account,"Account")
+        self.ui_log = self.ui_notloged
         self.ui_log.setupUi(self.ui.tab_account)
+        self.ui_log.LogInButton.clicked.connect(self.logIn)
+        self.ui_log.RegisterButton.clicked.connect(print("register"))
+        self.ui.tabWidget.setCurrentIndex(tab_index)
+
 
     def open_book(self):
         page_widget = QWidget()
