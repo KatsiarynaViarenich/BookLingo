@@ -59,14 +59,15 @@ class Ui_MainWindow(object):
         self.findFavoriteplainTextEdit.setGeometry(QRect(70, 60, 551, 31))
         self.findFavoriteplainTextEdit.setStyleSheet(u"background: #faf5ea;\n"
 "  box-shadow: none;")
-        self.addQuoteButton = QPushButton(self.tab_fav)
-        self.addQuoteButton.setObjectName(u"findBookButton")
-        self.addQuoteButton.setGeometry(QRect(640, 500, 80, 31))
-        self.addQuoteButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
+
+        self.findQuoteButton = QPushButton(self.tab_fav)
+        self.findQuoteButton.setObjectName(u"findBookButton")
+        self.findQuoteButton.setGeometry(QRect(640, 60, 70, 31))
+        self.findQuoteButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
 
         self.FavoritelistView = QListView(self.tab_fav)
         self.FavoritelistView.setObjectName(u"FavoritelistView")
-        self.FavoritelistView.setGeometry(QRect(70, 100, 651, 431))
+        self.FavoritelistView.setGeometry(QRect(70, 100, 651, 381))
         self.FavoritelistView.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;\n"
 "    box-shadow: none;")
@@ -78,14 +79,14 @@ class Ui_MainWindow(object):
 "    box-shadow: none;")
         self.delMyQuoteButton = QPushButton(self.tab_fav)
         self.delMyQuoteButton.setObjectName(u"findMyQuoteButton")
-        self.delMyQuoteButton.setGeometry(QRect(640, 60, 70, 31))
+        self.delMyQuoteButton.setGeometry(QRect(640, 500, 80, 31))
         self.delMyQuoteButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
         self.tabWidget.addTab(self.tab_fav, "")
         self.tab_mybooks = QWidget()
         self.tab_mybooks.setObjectName(u"my books")
         self.MyBookslistView = QListView(self.tab_mybooks)
         self.MyBookslistView.setObjectName(u"MyBookslistView")
-        self.MyBookslistView.setGeometry(QRect(70, 100, 651, 431))
+        self.MyBookslistView.setGeometry(QRect(70, 100, 651, 381))
         self.MyBookslistView.setStyleSheet(u"background: #faf5ea;\n"
 " border: none;\n"
 "    box-shadow: none;")
@@ -103,7 +104,12 @@ class Ui_MainWindow(object):
         self.readMyBookButton = QPushButton(self.tab_mybooks)
         self.readMyBookButton.setObjectName(u"findBookButton")
         self.readMyBookButton.setGeometry(QRect(640, 500, 80, 31))
-        self.readBookButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
+        self.readMyBookButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
+
+        self.delMyBookButton = QPushButton(self.tab_mybooks)
+        self.delMyBookButton.setObjectName(u"findBookButton")
+        self.delMyBookButton.setGeometry(QRect(70, 500, 80, 31))
+        self.delMyBookButton.setStyleSheet(u"  box-shadow: none; background-color: #f5e6c6;\n")
 
         self.findMyBookButton = QPushButton(self.tab_mybooks)
         self.findMyBookButton.setObjectName(u"findMyBookButton")
@@ -200,9 +206,10 @@ class Ui_MainWindow(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_find), QCoreApplication.translate("MainWindow", u"Library", None))
         self.findBookButton.setText("Find")
         self.findMyBookButton.setText("Find")
-        self.findMyQuoteButton.setText("Find")
+        self.findQuoteButton.setText("Find")
         self.addBookButton.setText(("Add"))
-        self.delQuoteButton.setText("Del")
+        self.delMyBookButton.setText("Delete")
+        self.delMyQuoteButton.setText("Delete")
         self.readMyBookButton.setText("Read")
     # retranslateUi
 

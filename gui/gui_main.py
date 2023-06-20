@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Authorizing", message)
         else:
             self.user = UserSession(self.session, self.session.query(User).filter_by(name=username).first().id)
-            self.books_tab()
+            self.load_users_things()
             print(f"{username},{password}")
             self.logIn()
 
@@ -166,15 +166,94 @@ class MainWindow(QMainWindow):
         self.ui_page.setupUi(page_widget)
         self.ui.tabWidget.addTab(page_widget, "Book's name")
 
-    def books_tab(self):
-        model=QStandardItemModel()
+    def load_users_things(self):
+        library_model=QStandardItemModel()
         for book in self.user.get_other_books(): ##?
-            item=QStandardItem(f"\"{book.title}\" - {book.author} ")
-            model.appendRow(item)
-        self.ui.FoundBookslistView.setModel(model)
+            item=QStandardItem(f"\"{book.title}\" - {book.author}")
+            library_model.appendRow(item)
+        self.ui.FoundBookslistView.setModel(library_model)
         self.ui.FoundBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
+        mybooks_model = QStandardItemModel()
+        for book in self.user.get_user_books():  ##?
+            item = QStandardItem(f"\"{book.title}\" - {book.author}")
+            mybooks_model.appendRow(item)
+        self.ui.MyBookslistView.setModel(mybooks_model)
+        self.ui.MyBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
+        quotes_model = QStandardItemModel()
+        for quote in self.user.get_user_quotes():  ##?
+            item = QStandardItem(f"\"{quote.quote}\"")
+            quotes_model.appendRow(item)
+        self.ui.FavoritelistView.setModel(quotes_model)
+        self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
+
+        #buttons
+        self.ui.addBookButton.clicked.connect(self.add_book)
+        self.ui.delMyBookButton.clicked.connect(self.delete_book)
+
+
+    def delete_book(self):
+        library_model = self.ui.FoundBookslistView.model()
+        selected_indexes = self.ui.MyBookslistView.selectedIndexes()
+        if not selected_indexes:
+            return
+        my_books_model = self.ui.MyBookslistView.model()
+        book_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0])
+        book_name = book_item.text().split(" - ")
+        book_name[0] = book_name[0].replace('"', '')
+        book_name[1] = book_name[1]
+        print(book_name)
+
+        """
+        тут будет бред коня, поиск по не своим книгам
+        """
+        book = None
+        for b in self.user.get_user_books():
+            if b.title == book_name[0] and b.author == book_name[1]:
+                book = b
+                break
+        if book != None:
+            for connection in b.connections:
+                if connection.book_id==b.id and self.user.user_id==connection.user_id:
+                    self.user.remove_connection(book.id)
+                    library_model.appendRow(book_item.clone())
+                    my_books_model.removeRow(selected_indexes[0].row())
+                    break
+        else:
+            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
+
+        self.ui.MyBookslistView.setModel(my_books_model)
+        self.ui.FoundBookslistView.setModel(library_model)
+    def add_book(self):
+        library_model=self.ui.FoundBookslistView.model()
+        selected_indexes = self.ui.FoundBookslistView.selectedIndexes()
+        if not selected_indexes:
+            return
+        my_books_model = self.ui.MyBookslistView.model()
+        book_item = self.ui.FoundBookslistView.model().itemFromIndex(selected_indexes[0])
+        book_name=book_item.text().split(" - ")
+        book_name[0]=book_name[0].replace('"','')
+        book_name[1]=book_name[1]
+        print(book_name)
+
+        """
+        тут будет бред коня, поиск по не своим книгам
+        """
+        book=None
+        for b in self.user.get_other_books():
+            if b.title==book_name[0] and b.author==book_name[1]:
+                book=b
+                break
+        if book!=None:
+            self.user.add_connection(book.id)
+            my_books_model.appendRow(book_item.clone())
+            library_model.removeRow(selected_indexes[0].row())
+        else:
+            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
+
+        self.ui.MyBookslistView.setModel(my_books_model)
+        self.ui.FoundBookslistView.setModel(library_model)
 
 if __name__ == "__main__":
     print()
