@@ -1,7 +1,8 @@
 import sys
 
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QVBoxLayout, QWidget, \
-    QListWidgetItem, QMessageBox
+    QListWidgetItem, QMessageBox, QListView
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -14,6 +15,7 @@ from RegisterWindow import Ui_RegisterQMainWindow
 from services.authorizing_process import AuthorizingProcess
 from services.user_session import UserSession
 from scripts.run_setup import User,Book,Quote,Base
+from PySide6.QtGui import QStandardItem, QStandardItemModel
 
 
 class MainWindow(QMainWindow):
@@ -26,8 +28,8 @@ class MainWindow(QMainWindow):
         """
         engine = create_engine('sqlite:///../data/app.db')
         Session = sessionmaker(bind=engine)
-        session = Session()
-        self.ap=AuthorizingProcess(session)
+        self.session = Session()
+        self.ap=AuthorizingProcess(self.session)
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui_page=Ui_PageMainWindow()
@@ -83,11 +85,13 @@ class MainWindow(QMainWindow):
         username=self.ui_log.loginLine.text()
         password=self.ui_log.passLine.text()
         message=self.ap.log_in(username,password)
-        QMessageBox.warning(self, "Authorizing", message)
+
         if message!="Login successful":
             self.logInPage()
+            QMessageBox.warning(self, "Authorizing", message)
         else:
-            self.user = self.session.query(User).filter_by(name=username).first()
+            self.user = UserSession(self.session, self.session.query(User).filter_by(name=username).first().id)
+            self.books_tab()
             print(f"{username},{password}")
             self.logIn()
 
@@ -127,10 +131,19 @@ class MainWindow(QMainWindow):
             self.ui_log.setupUi(self.ui.tab_account)
             self.ui_log.LogOutButton.clicked.connect(self.logOut)
 
-            self.ui_log.HelloUserQTextEdit.setText(f"Dear {self.user.name},\nFeel free to browse through our library, "
-                                                   "add books to your library or favourite quotes."
-                                                   " We hope you have a delightful reading experience with BookLingo.")
 
+            html_text=QCoreApplication.translate("","<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">"
+"p, li { white-space: pre-wrap; }"
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8pt; font-weight:400; font-style:normal;\">"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:14pt; font-weight:600;\">Dear </span><span style=\" font-size:14pt; font-weight:600; font-style:italic;\">User</span><span style=\" font-size:14pt; font-weight:600;\">,</span></p>"
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"></p>"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:12pt;\">Feel free to browse through our library, add books to your library or favorite quotes. We hope you have a delightful reading experience with BookLingo.</span></p></body></html>")
+            html_text=html_text.replace(
+                "<span style=\" font-size:14pt; font-weight:600; font-style:italic;\">User</span>",
+                f"<span style=\" font-size:14pt; font-weight:600; font-style:italic;\">{self.session.query(User).filter_by(id=self.user.user_id).first().name}</span>")
+
+            self.ui_log.HelloUserQTextEdit.setHtml(html_text)
             self.ui.tabWidget.setCurrentIndex(tab_index)
 
     def logOut(self):
@@ -154,8 +167,12 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.addTab(page_widget, "Book's name")
 
     def books_tab(self):
-        curr_tab=self.ui.tabWidget.currentWidget()
-
+        model=QStandardItemModel()
+        for book in self.user.get_other_books(): ##?
+            item=QStandardItem(f"\"{book.title}\" - {book.author} ")
+            model.appendRow(item)
+        self.ui.FoundBookslistView.setModel(model)
+        self.ui.FoundBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
 
 

@@ -31,7 +31,7 @@ class Ui_LogedQMainWindow(object):
 
         self.HelloUserQTextEdit = QTextEdit(self.centralwidget)
         self.HelloUserQTextEdit.setObjectName(u"HelloUserQTextEdit")
-        self.HelloUserQTextEdit.setGeometry(QRect(120, 100, 551, 71))
+        self.HelloUserQTextEdit.setGeometry(QRect(120, 100, 551, 171))
         self.HelloUserQTextEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none;")
         self.LogOutButton = QPushButton(self.centralwidget)

@@ -77,7 +77,7 @@ class Ui_PageMainWindow(object):
 "    box-shadow: none; background-color: #faf5ea;\n")
         self.questionsButton = QPushButton(self.centralwidget)
         self.questionsButton.setObjectName(u"pushButton_3")
-        self.questionsButton.setGeometry(QRect(270, 495, 181, 24))
+        self.questionsButton.setGeometry(QRect(275, 495, 181, 24))
         #self.questionsButton.set
         self.questionsButton.setStyleSheet(u"font-style: italic;"
         "    box-shadow: none;  font-size: 14px; ")
