@@ -1,9 +1,9 @@
 import bcrypt
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+#from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, declarative_base
 
-engine = create_engine('sqlite:///../database/app.db')
+engine = create_engine('sqlite:///../data/app.db')
 Base = declarative_base()
 
 

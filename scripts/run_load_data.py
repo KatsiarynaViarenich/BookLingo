@@ -1,3 +1,4 @@
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -5,7 +6,7 @@ from scripts.run_setup import Book
 
 
 def main():
-    engine = create_engine('sqlite:///../database/app.db')
+    engine = create_engine('sqlite:///../data/app.db')
     Session = sessionmaker(bind=engine)
 
     session = Session()
