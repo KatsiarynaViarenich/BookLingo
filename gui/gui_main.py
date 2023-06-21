@@ -3,7 +3,7 @@ from functools import partial
 
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QVBoxLayout, QWidget, \
-    QListWidgetItem, QMessageBox, QListView, QMenu
+    QListWidgetItem, QMessageBox, QListView, QMenu, QToolTip
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -16,9 +16,12 @@ from RegisterWindow import Ui_RegisterQMainWindow
 from services.authorizing_process import AuthorizingProcess
 from services.user_session import UserSession
 from scripts.run_setup import User,Book,Quote,Base
-from PySide6.QtGui import QStandardItem, QStandardItemModel, QContextMenuEvent, QAction, Qt
+from PySide6.QtGui import QStandardItem, QStandardItemModel, QContextMenuEvent, QAction, Qt, QCursor
 from services.book_session import BookSession
-from modules import question_generator, wikipedia_search,fancy_words_generator,phrase_translation
+from modules.question_generator import QuestionGenerator
+from modules.wikipedia_search import WikipediaSearch
+from modules.fancy_words_generator import FancyWordsGenerator
+from modules.phrase_translation import PhraseTranslation
 
 
 class MainWindow(QMainWindow):
@@ -49,9 +52,6 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.currentChanged.connect(self.open_tab)
         self.ui.tabWidget.setCurrentIndex(0)
         self.ui_page.setupUi(self)
-
-        self.ui_page.textEdit.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.ui_page.textEdit.customContextMenuRequested.connect(self.open_context_menu)
 
     def open_tab(self, index):
         if self.ui_log == self.ui_logPage or self.ui_log == self.ui_register:
@@ -205,6 +205,7 @@ class MainWindow(QMainWindow):
 
         self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book))
         self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book))
+        self.ui_page.questionsButton.clicked.connect(self.check_understanding)
 
     def next_page(self,book):
         if book.page_number<book.book_pages.__len__()-1:
@@ -327,33 +328,36 @@ class MainWindow(QMainWindow):
         self.ui.MyBookslistView.setModel(my_books_model)
         self.ui.FoundBookslistView.setModel(library_model)
 
-    def open_context_menu(self,pos):
-        copy_action = QAction("Copy", self)
-        translate_action = QAction("Translate", self)
-        wikipedia_action = QAction("Wikipedia", self)
-
-        # Connect the actions to their respective slots/methods
-        copy_action.triggered.connect(self.copy_text)
-        translate_action.triggered.connect(self.translate_text)
-        wikipedia_action.triggered.connect(self.open_wikipedia)
-
-        # Create the context menu
-        context_menu = QMenu(self)
-        context_menu.addAction(copy_action)
-        context_menu.addAction(translate_action)
-        context_menu.addAction(wikipedia_action)
-
-        # Show the context menu at the requested position
-        context_menu.exec_(self.ui_page.textEdit.mapToGlobal(pos))
-
-    def copy_text(self):
-        selected_text = self.ui_page.textEdit.textCursor().selectedText()
 
     def translate_text(self):
+        self.label.setText("Translate")
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
+        translation = PhraseTranslation.get_translation(selected_text)
+        QMessageBox.warning(self,"Translation",f"{selected_text} - {translation}")
 
     def open_wikipedia(self):
+        self.label.setText("Wikipedia")
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
+        result=WikipediaSearch.search(selected_text)
+        QMessageBox.warning(self,"Wikipedia",f"{result}")
+
+
+    def add_quote(self):
+        self.label.setText("Add quote")
+        selected_text = self.ui_page.textEdit.textCursor().selectedText()
+        model=QStandardItemModel()
+
+        self.ui.FavoritelistView.setModel(model)
+
+    def check_understanding(self):
+        selected_text = self.ui_page.textEdit.toPlainText()
+        print(selected_text)
+        if selected_text:
+            QMessageBox.information(self, "Hey", f"Questions:\nQuestionGenerator.generate(selected_text)\n"
+                                                 f"Fancy words:\n {FancyWordsGenerator(selected_text).get_fancy_word()}")
+        else:
+            QMessageBox.warning(self, "oops","Page is empty.")
+
 
 
 if __name__ == "__main__":
