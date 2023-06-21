@@ -29,8 +29,8 @@ class Ui_PageMainWindow(object):
         self.AuthorNametextEdit = QTextEdit(self.centralwidget)
         self.AuthorNametextEdit.setReadOnly(True)
         self.AuthorNametextEdit.setObjectName(u"AuthorNametextEdit")
-        self.AuthorNametextEdit.setGeometry(QRect(40, 0, 671, 31))
-        self.AuthorNametextEdit.setStyleSheet(u" border: none;\n background-color: #f5e6c6;\n")
+        self.AuthorNametextEdit.setGeometry(QRect(0, 10, 631, 31))
+        self.AuthorNametextEdit.setStyleSheet(u" border: none;\n background-color: #f5e6c6; font-size: 12px\n")
 
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName(u"textEdit")
@@ -81,6 +81,12 @@ class Ui_PageMainWindow(object):
         #self.questionsButton.set
         self.questionsButton.setStyleSheet(u"font-style: italic;"
         "    box-shadow: none;  font-size: 14px; ")
+
+        self.closeButton = QPushButton(self.centralwidget)
+        self.closeButton.setObjectName(u"closeButton")
+        self.closeButton.setGeometry(QRect(600, 10, 111, 31))
+        self.closeButton.setStyleSheet(u"font-style: italic;"
+                                           "    box-shadow: none;  font-size: 14px; ")
         #MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -110,5 +116,6 @@ class Ui_PageMainWindow(object):
         self.prevPageButton.setText(QCoreApplication.translate("MainWindow", u"<-", None))
         self.PageslineEdit.setText(QCoreApplication.translate("MainWindow", u"page/page", None))
         self.questionsButton.setText(QCoreApplication.translate("MainWindow", u"Check understanding", None))
+        self.closeButton.setText("Close")
     # retranslateUi
 

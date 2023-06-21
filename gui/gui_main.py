@@ -16,6 +16,8 @@ from services.authorizing_process import AuthorizingProcess
 from services.user_session import UserSession
 from scripts.run_setup import User,Book,Quote,Base
 from PySide6.QtGui import QStandardItem, QStandardItemModel
+from services.book_session import BookSession
+from modules import question_generator, wikipedia_search,fancy_words_generator,phrase_translation
 
 
 class MainWindow(QMainWindow):
@@ -33,9 +35,8 @@ class MainWindow(QMainWindow):
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui_page=Ui_PageMainWindow()
-        self.open_book() #wkinut w funkcyu
 
-
+        self.books=[]
 
         self.ui_loged=Ui_LogedQMainWindow()
         self.ui_notloged=Ui_NotLogedMainWindow()
@@ -50,8 +51,7 @@ class MainWindow(QMainWindow):
 
     def open_tab(self, index):
         if self.ui_log == self.ui_logPage or self.ui_log == self.ui_register:
-            if index!=1:
-                QMessageBox.warning(self, "Oops...", "You're not logged.\nGo to Accounts.")
+            if index not in [0, 1]:
                 self.logOut()
                 self.ui.tabWidget.setCurrentIndex(0)
         elif self.ui_log==self.ui_notloged:
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
             self.registerPage()
         else:
             print(f"{username},{password}")
-            self.logIn()
+            self.ui.tabWidget.setCurrentIndex(0)
 
     def registerPage(self):
         tab_index = 1
@@ -147,6 +147,12 @@ class MainWindow(QMainWindow):
             self.ui.tabWidget.setCurrentIndex(tab_index)
 
     def logOut(self):
+        if self.user!=None:
+            self.load_users_things()
+            for index in range(self.ui.tabWidget.count(),5,-1):
+                self.ui.tabWidget.removeTab(index-1)
+            self.books=[]
+            self.user=None
         tab_index=1
         self.ui.tabWidget.removeTab(tab_index)
         self.ui.tab_account=QWidget()
@@ -162,9 +168,62 @@ class MainWindow(QMainWindow):
 
 
     def open_book(self):
+        library_model = self.ui.FoundBookslistView.model()
+        selected_indexes = self.ui.MyBookslistView.selectedIndexes()
+        if not selected_indexes:
+            return
+        my_books_model = self.ui.MyBookslistView.model()
+        book_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0])
+        book_name = book_item.text().split(" - ")
+        book_name[0] = book_name[0].replace('"', '')
+        book_name[1] = book_name[1]
+        print(book_name)
         page_widget = QWidget()
         self.ui_page.setupUi(page_widget)
-        self.ui.tabWidget.addTab(page_widget, "Book's name")
+        self.ui.tabWidget.addTab(page_widget, book_item.text())
+
+        book = None
+        for b in self.user.get_user_books():
+            if b.title == book_name[0] and b.author == book_name[1]:
+                book = BookSession(self.session,b.id,self.user.user_id)
+                break
+        if book != None:
+            self.books.append(b)
+            self.ui_page.AuthorNametextEdit.setText(f"{b.title} - {b.author}")
+        else:
+            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
+
+        self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.count()-1)
+
+        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+        self.ui_page.PageslineEdit.setText(str(book.page_number))
+        self.ui_page.closeButton.clicked.connect(self.close_book)
+
+        self.ui_page.nextPageButton.clicked.connect(self.next_page)
+        self.ui_page.prevPageButton.clicked.connect(self.prev_page)
+
+    def next_page(self,book):
+        book.update_page_number(book.page_number + 1)
+        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+
+    def prev_page(self,book):
+        book.update_page_number(book.page_number - 1)
+        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+
+
+
+    def close_book(self):
+        book_name = self.ui_page.AuthorNametextEdit.toPlainText().split(" - ")
+        book_name[0] = book_name[0].replace('"', '')
+        book_name[1] = book_name[1]
+        for book in self.books:
+            if book.title == book_name[0] and book.author == book_name[1]:
+                self.books.remove(book)
+                break
+        current_index = self.ui.tabWidget.currentIndex()
+        self.ui.tabWidget.removeTab(current_index)
+
+
 
     def load_users_things(self):
         library_model=QStandardItemModel()
@@ -191,6 +250,7 @@ class MainWindow(QMainWindow):
         #buttons
         self.ui.addBookButton.clicked.connect(self.add_book)
         self.ui.delMyBookButton.clicked.connect(self.delete_book)
+        self.ui.readMyBookButton.clicked.connect(self.open_book)
 
 
     def delete_book(self):
@@ -247,7 +307,10 @@ class MainWindow(QMainWindow):
                 break
         if book!=None:
             self.user.add_connection(book.id)
-            my_books_model.appendRow(book_item.clone())
+            book_session = BookSession(self.session, book.id,self.user.user_id)
+
+            book_item = QStandardItem(f"\"{book.title}\" - {book.author}")
+            my_books_model.appendRow(book_item)
             library_model.removeRow(selected_indexes[0].row())
         else:
             QMessageBox.warning(self, "Oops..", "Something went wrong :(")
