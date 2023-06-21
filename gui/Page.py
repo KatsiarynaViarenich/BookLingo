@@ -38,6 +38,7 @@ class Ui_PageMainWindow(object):
         self.textEdit.setStyleSheet(u" border: none;\n"
 "    box-shadow: none; background-color: #faf5ea;\n;  padding: 15px; ")
         self.textEdit.setFontPointSize(12)
+
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName(u"frame_2")
         self.frame_2.setGeometry(QRect(60, 510, 651, 41))

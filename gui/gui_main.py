@@ -1,8 +1,9 @@
 import sys
+from functools import partial
 
 from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton, QLineEdit, QLabel, QVBoxLayout, QWidget, \
-    QListWidgetItem, QMessageBox, QListView
+    QListWidgetItem, QMessageBox, QListView, QMenu
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -15,7 +16,7 @@ from RegisterWindow import Ui_RegisterQMainWindow
 from services.authorizing_process import AuthorizingProcess
 from services.user_session import UserSession
 from scripts.run_setup import User,Book,Quote,Base
-from PySide6.QtGui import QStandardItem, QStandardItemModel
+from PySide6.QtGui import QStandardItem, QStandardItemModel, QContextMenuEvent, QAction, Qt
 from services.book_session import BookSession
 from modules import question_generator, wikipedia_search,fancy_words_generator,phrase_translation
 
@@ -35,7 +36,6 @@ class MainWindow(QMainWindow):
         self.ui=Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui_page=Ui_PageMainWindow()
-
         self.books=[]
 
         self.ui_loged=Ui_LogedQMainWindow()
@@ -48,6 +48,10 @@ class MainWindow(QMainWindow):
         self.account_buttons()
         self.ui.tabWidget.currentChanged.connect(self.open_tab)
         self.ui.tabWidget.setCurrentIndex(0)
+        self.ui_page.setupUi(self)
+
+        self.ui_page.textEdit.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.ui_page.textEdit.customContextMenuRequested.connect(self.open_context_menu)
 
     def open_tab(self, index):
         if self.ui_log == self.ui_logPage or self.ui_log == self.ui_register:
@@ -199,17 +203,22 @@ class MainWindow(QMainWindow):
         self.ui_page.PageslineEdit.setText(str(book.page_number))
         self.ui_page.closeButton.clicked.connect(self.close_book)
 
-        self.ui_page.nextPageButton.clicked.connect(self.next_page)
-        self.ui_page.prevPageButton.clicked.connect(self.prev_page)
+        self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book))
+        self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book))
 
     def next_page(self,book):
-        book.update_page_number(book.page_number + 1)
-        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+        if book.page_number<book.book_pages.__len__()-1:
+            book.page_number+=1
+            book.update_page_number(book.page_number)
+            self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+            self.ui_page.PageslineEdit.setText(str(book.page_number))
 
     def prev_page(self,book):
-        book.update_page_number(book.page_number - 1)
-        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-
+        if book.page_number>0:
+            book.page_number-=1
+            book.update_page_number(book.page_number)
+            self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+            self.ui_page.PageslineEdit.setText(str(book.page_number))
 
 
     def close_book(self):
@@ -317,6 +326,35 @@ class MainWindow(QMainWindow):
 
         self.ui.MyBookslistView.setModel(my_books_model)
         self.ui.FoundBookslistView.setModel(library_model)
+
+    def open_context_menu(self,pos):
+        copy_action = QAction("Copy", self)
+        translate_action = QAction("Translate", self)
+        wikipedia_action = QAction("Wikipedia", self)
+
+        # Connect the actions to their respective slots/methods
+        copy_action.triggered.connect(self.copy_text)
+        translate_action.triggered.connect(self.translate_text)
+        wikipedia_action.triggered.connect(self.open_wikipedia)
+
+        # Create the context menu
+        context_menu = QMenu(self)
+        context_menu.addAction(copy_action)
+        context_menu.addAction(translate_action)
+        context_menu.addAction(wikipedia_action)
+
+        # Show the context menu at the requested position
+        context_menu.exec_(self.ui_page.textEdit.mapToGlobal(pos))
+
+    def copy_text(self):
+        selected_text = self.ui_page.textEdit.textCursor().selectedText()
+
+    def translate_text(self):
+        selected_text = self.ui_page.textEdit.textCursor().selectedText()
+
+    def open_wikipedia(self):
+        selected_text = self.ui_page.textEdit.textCursor().selectedText()
+
 
 if __name__ == "__main__":
     print()
