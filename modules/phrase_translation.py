@@ -6,6 +6,10 @@ class PhraseTranslation:
         self.translator = Translator(service_urls=['translate.google.com'])
 
     def get_translation(self, phrase):
-        translation = self.translator.translate(phrase, src='en', dest='pl')
-        print(translation)
+        while True:
+            try:
+                translation = self.translator.translate(phrase, src='en', dest='pl')
+                break
+            except Exception:
+                pass
         return translation.text

@@ -27,7 +27,7 @@ class UserSession:
         self.session.commit()
         print(f"Connection added: User {user.name} <-> Book {book.title}")
 
-    dbook_pathef remove_connection(self, connection_id):
+    def remove_connection(self, connection_id):
         connection = self.session.query(Connection).get(connection_id)
 
         if connection is None:
@@ -50,11 +50,11 @@ class UserSession:
     def get_connections(self):
         return self.session.query(Connection).all()
 
-    def get_user_connections(self):
-        return self.session.query(Connection).filter_by(user_id=self.user_id).all()
-
-    def get_user_books(self):
-        return self.session.query(Book).join(Connection).filter(Connection.user_id == self.user_id).all()
-
+    # def get_user_connections(self):
+    #     return self.session.query(Connection).filter_by(user_id=self.user_id).all()
+    #
+    # def get_user_books(self):
+    #     return self.session.query(Book).join(Connection).filter(Connection.user_id == self.user_id).all()
+    #
     def get_user_quotes(self):
         return self.session.query(Quote).filter_by(user_id=self.user_id).all()
