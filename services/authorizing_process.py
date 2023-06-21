@@ -1,3 +1,5 @@
+import datetime
+
 from scripts.run_setup import User
 
 
@@ -11,6 +13,7 @@ class AuthorizingProcess:
 
         new_user = User(name=username)
         new_user.set_password(password)
+        new_user.last_login = datetime.datetime.now()
 
         self.session.add(new_user)
         self.session.commit()
@@ -21,6 +24,7 @@ class AuthorizingProcess:
         user = self.session.query(User).filter_by(name=username).first()
 
         if user and user.check_password(password):
+            user.last_login = datetime.datetime.now()
             return "Login successful"
         else:
             return "Invalid username or password"
