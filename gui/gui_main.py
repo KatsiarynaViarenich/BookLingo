@@ -1,6 +1,5 @@
 import sys
 from functools import partial
-from modules.question_generator import QuestionGenerator
 from Loged import Ui_LogedQMainWindow
 from LoginWindow import Ui_LoginPageMainWindow
 from new_vision import Ui_MainWindow
@@ -27,6 +26,7 @@ from services.book_session import BookSession
 from services.user_session import UserSession
 from modules import fancy_words_generator
 from modules import wikipedia_search
+from modules.question_generator import QuestionGenerator
 
 
 
@@ -238,10 +238,12 @@ class MainWindow(QMainWindow):
             self.ui_page.PageslineEdit.setText(str(book.page_number))
 
     def next_page(self, book):
-        book.update_page_number(book.page_number + 1)
+        book.page_number+=1
+        book.update_page_number(book.page_number)
         self.ui_page.textEdit.setText(book.book_pages[book.page_number])
 
     def prev_page(self, book):
+        book.page_number-=1
         book.update_page_number(book.page_number - 1)
         self.ui_page.textEdit.setText(book.book_pages[book.page_number])
 
@@ -358,7 +360,9 @@ class MainWindow(QMainWindow):
 
     def translate_text(self):
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
-        translation = PhraseTranslation.get_translation(selected_text)
+        from modules.phrase_translation import PhraseTranslation
+        PhraseTranslation_obj = PhraseTranslation()
+        translation = PhraseTranslation_obj.get_translation(selected_text)
         QMessageBox.warning(self,"Translation",f"{selected_text} - {translation}")
 
     def open_wikipedia(self):
@@ -393,7 +397,7 @@ class MainWindow(QMainWindow):
         selected_text = self.ui_page.textEdit.toPlainText()
         print(selected_text)
         if selected_text:
-            QMessageBox.information(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\n"
+            QMessageBox.warning(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\n"
                                                  f"Fancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
         else:
             QMessageBox.warning(self, "oops","Page is empty.")
