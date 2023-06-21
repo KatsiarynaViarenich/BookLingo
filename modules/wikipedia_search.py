@@ -13,3 +13,5 @@ def search_wikipedia(query):
             return page.summary
     except wikipedia.exceptions.PageError:
         return "No Wikipedia page found."
+    except ConnectionError:
+        return "Network connection error."

@@ -10,6 +10,8 @@ class PhraseTranslation:
             try:
                 translation = self.translator.translate(phrase, src='en', dest='pl')
                 break
+            except ConnectionError:
+                return ["Network connection error."]
             except Exception:
                 pass
         return translation.text
