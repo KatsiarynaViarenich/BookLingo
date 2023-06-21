@@ -31,4 +31,6 @@ class QuestionGenerator:
                 )
         except ConnectionError:
             return ["Network connection error."]
+        except Exception as e:
+            print(e)
         return output

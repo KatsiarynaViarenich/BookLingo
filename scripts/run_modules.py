@@ -15,10 +15,10 @@ text = """
  'My dear fellow, can't you see how important this fact is to the case?' 
  'No, I 
 """
-
-PhraseTranslation = PhraseTranslation()
-translation = PhraseTranslation.get_translation(some_words)
-print(translation)
+#
+# PhraseTranslation = PhraseTranslation()
+# translation = PhraseTranslation.get_translation(some_words)
+# print(translation)
 
 QuestionGenerator = QuestionGenerator()
 questions = QuestionGenerator.generate_questions(text)

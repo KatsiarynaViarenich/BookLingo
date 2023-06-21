@@ -11,7 +11,9 @@ class PhraseTranslation:
                 translation = self.translator.translate(phrase, src="en", dest="pl")
                 break
             except ConnectionError:
+                print("ИНЕТ ПРОПАЛ")
                 return ["Network connection error."]
-            except Exception:
+            except Exception as e:
+                print(e)
                 pass
         return translation.text

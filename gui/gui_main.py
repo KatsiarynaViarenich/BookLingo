@@ -1,6 +1,6 @@
 import sys
 from functools import partial
-
+from modules.question_generator import QuestionGenerator
 from Loged import Ui_LogedQMainWindow
 from LoginWindow import Ui_LoginPageMainWindow
 from new_vision import Ui_MainWindow
@@ -26,7 +26,6 @@ from modules.phrase_translation import PhraseTranslation
 from services.book_session import BookSession
 from services.user_session import UserSession
 from modules import fancy_words_generator
-from modules.question_generator import QuestionGenerator
 from modules import wikipedia_search
 
 
@@ -221,6 +220,8 @@ class MainWindow(QMainWindow):
         self.ui_page.questionsButton.clicked.connect(self.check_understanding)
         self.ui_page.addQuoteButton.clicked.connect(lambda :self.add_quote(book))
         self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
+        self.ui_page.translateButton.clicked.connect(self.translate_text)
+        self.ui_page.wikipediaButton.clicked.connect(self.open_wikipedia)
 
     def next_page(self,book):
         if book.page_number<book.book_pages.__len__()-1:
@@ -356,13 +357,11 @@ class MainWindow(QMainWindow):
 
 
     def translate_text(self):
-        self.label.setText("Translate")
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
         translation = PhraseTranslation.get_translation(selected_text)
         QMessageBox.warning(self,"Translation",f"{selected_text} - {translation}")
 
     def open_wikipedia(self):
-        self.label.setText("Wikipedia")
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
         result=wikipedia_search.search_wikipedia(selected_text)
         QMessageBox.warning(self,"Wikipedia",f"{result}")
@@ -386,8 +385,9 @@ class MainWindow(QMainWindow):
         if not selected_indexes:
             return
         quote_model.removeRow(selected_indexes[0].row())
-        #self.user.remove_quotes()   ????
+        #self.user.remove_quotes()
         self.ui.FavoritelistView.setModel(quote_model)
+
 
     def check_understanding(self):
         selected_text = self.ui_page.textEdit.toPlainText()

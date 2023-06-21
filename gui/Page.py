@@ -56,8 +56,18 @@ class Ui_PageMainWindow(object):
 
         self.addQuoteButton = QPushButton(self.centralwidget)
         self.addQuoteButton.setObjectName("previous page")
-        self.addQuoteButton.setGeometry(QRect(475, 495, 90, 24))
-        self.addQuoteButton.setStyleSheet(" border: none;\n" "    box-shadow: none;")
+        self.addQuoteButton.setGeometry(QRect(380, 10, 75, 31))  #275, 495, 181, 24
+        self.addQuoteButton.setStyleSheet(" \n" "    box-shadow: none;")
+
+        self.translateButton = QPushButton(self.centralwidget)
+        self.translateButton.setObjectName("previous page")
+        self.translateButton.setGeometry(QRect(470, 10, 75, 31))  # 275, 495, 181, 24
+        self.translateButton.setStyleSheet(" \n" "    box-shadow: none;")
+
+        self.wikipediaButton = QPushButton(self.centralwidget)
+        self.wikipediaButton.setObjectName("previous page")
+        self.wikipediaButton.setGeometry(QRect(560, 10, 75, 31))  # 275, 495, 181, 24
+        self.wikipediaButton.setStyleSheet(" \n" "    box-shadow: none;")
 
         icon1 = QIcon()
         iconThemeName = "go-next"
@@ -106,7 +116,7 @@ class Ui_PageMainWindow(object):
 
         self.closeButton = QPushButton(self.centralwidget)
         self.closeButton.setObjectName("closeButton")
-        self.closeButton.setGeometry(QRect(600, 10, 111, 31))
+        self.closeButton.setGeometry(QRect(650, 10, 75, 31))
         self.closeButton.setStyleSheet(
             "font-style: italic;" "    box-shadow: none;  font-size: 14px; "
         )
@@ -151,5 +161,7 @@ class Ui_PageMainWindow(object):
         )
         self.closeButton.setText("Close")
         self.addQuoteButton.setText("Add quote")
+        self.translateButton.setText("Translate")
+        self.wikipediaButton.setText("Wiki")
 
     # retranslateUi
