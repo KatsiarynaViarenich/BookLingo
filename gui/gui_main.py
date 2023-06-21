@@ -26,6 +26,7 @@ from modules.phrase_translation import PhraseTranslation
 from services.book_session import BookSession
 from services.user_session import UserSession
 from modules import fancy_words_generator
+from modules.question_generator import QuestionGenerator
 from modules import wikipedia_search
 
 
@@ -218,6 +219,8 @@ class MainWindow(QMainWindow):
         self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book))
         self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book))
         self.ui_page.questionsButton.clicked.connect(self.check_understanding)
+        self.ui_page.addQuoteButton.clicked.connect(lambda :self.add_quote(book))
+        self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
 
     def next_page(self,book):
         if book.page_number<book.book_pages.__len__()-1:
@@ -269,7 +272,7 @@ class MainWindow(QMainWindow):
 
         quotes_model = QStandardItemModel()
         for quote in self.user.get_user_quotes():  ##?
-            item = QStandardItem(f'"{quote.quote}"')
+            item = QStandardItem(quote[2])
             quotes_model.appendRow(item)
         self.ui.FavoritelistView.setModel(quotes_model)
         self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
@@ -278,6 +281,7 @@ class MainWindow(QMainWindow):
         self.ui.addBookButton.clicked.connect(self.add_book)
         self.ui.delMyBookButton.clicked.connect(self.delete_book)
         self.ui.readMyBookButton.clicked.connect(self.open_book)
+        self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
 
     def delete_book(self):
         library_model = self.ui.FoundBookslistView.model()
@@ -364,18 +368,32 @@ class MainWindow(QMainWindow):
         QMessageBox.warning(self,"Wikipedia",f"{result}")
 
 
-    def add_quote(self):
-        self.label.setText("Add quote")
+    def add_quote(self,book):
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
-        model=QStandardItemModel()
+        book.add_quote(selected_text)
 
-        self.ui.FavoritelistView.setModel(model)
+        quote_model = self.ui.FavoritelistView.model()
+
+        item = QStandardItem(selected_text)
+        quote_model.appendRow(item)
+
+        self.ui.FavoritelistView.setModel(quote_model)
+        self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
+
+    def delete_quote(self):
+        quote_model = self.ui.FavoritelistView.model()
+        selected_indexes = self.ui.MyBookslistView.selectedIndexes()
+        if not selected_indexes:
+            return
+        quote_model.removeRow(selected_indexes[0].row())
+        #self.user.remove_quotes()   ????
+        self.ui.FavoritelistView.setModel(quote_model)
 
     def check_understanding(self):
         selected_text = self.ui_page.textEdit.toPlainText()
         print(selected_text)
         if selected_text:
-            QMessageBox.information(self, "Hey", f"Questions:\nQuestionGenerator.generate(selected_text)\n"
+            QMessageBox.information(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\n"
                                                  f"Fancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
         else:
             QMessageBox.warning(self, "oops","Page is empty.")

@@ -53,6 +53,12 @@ class Ui_PageMainWindow(object):
         self.nextPageButton.setObjectName("nextPage")
         self.nextPageButton.setGeometry(QRect(610, 10, 41, 24))
         self.nextPageButton.setStyleSheet(" border: none;\n" "    box-shadow: none;")
+
+        self.addQuoteButton = QPushButton(self.centralwidget)
+        self.addQuoteButton.setObjectName("previous page")
+        self.addQuoteButton.setGeometry(QRect(475, 495, 90, 24))
+        self.addQuoteButton.setStyleSheet(" border: none;\n" "    box-shadow: none;")
+
         icon1 = QIcon()
         iconThemeName = "go-next"
         if QIcon.hasThemeIcon(iconThemeName):
@@ -130,14 +136,7 @@ class Ui_PageMainWindow(object):
                 None,
             )
         )
-        """
-        self.KontoButton_3.setText(QCoreApplication.translate("MainWindow", u"L", None))
-        self.MyBooksButton_3.setText(QCoreApplication.translate("MainWindow", u"MyBooks", None))
-        self.FindButton_3.setText(QCoreApplication.translate("MainWindow", u"Find", None))
-        self.FavoriteButton_3.setText(QCoreApplication.translate("MainWindow", u"Fav", None))
-        self.ExitButton_3.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-        self.HelpButton_3.setText(QCoreApplication.translate("MainWindow", u"Help", None))
-        """
+
         self.nextPageButton.setText(
             QCoreApplication.translate("MainWindow", "->", None)
         )
@@ -151,5 +150,6 @@ class Ui_PageMainWindow(object):
             QCoreApplication.translate("MainWindow", "Check understanding", None)
         )
         self.closeButton.setText("Close")
+        self.addQuoteButton.setText("Add quote")
 
     # retranslateUi

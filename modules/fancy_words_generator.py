@@ -1,6 +1,7 @@
 import random
 
 import nltk
+nltk.download('punkt')
 
 
 def get_fancy_words(text, num_words=10):
