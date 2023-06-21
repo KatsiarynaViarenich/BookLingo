@@ -1,7 +1,7 @@
+from modules.fancy_words_generator import get_fancy_words
 from modules.phrase_translation import PhraseTranslation
 from modules.question_generator import QuestionGenerator
 from modules.wikipedia_search import search_wikipedia
-from modules.fancy_words_generator import get_fancy_words
 
 some_words = "She had left"
 text = """
@@ -20,11 +20,9 @@ PhraseTranslation = PhraseTranslation()
 translation = PhraseTranslation.get_translation(some_words)
 print(translation)
 
-
 QuestionGenerator = QuestionGenerator()
 questions = QuestionGenerator.generate_questions(text)
 print(questions)
-
 
 results = search_wikipedia("Sherlock Holmes")
 print(results)

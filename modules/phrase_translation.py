@@ -3,12 +3,12 @@ from googletrans import Translator
 
 class PhraseTranslation:
     def __init__(self):
-        self.translator = Translator(service_urls=['translate.google.com'])
+        self.translator = Translator(service_urls=["translate.google.com"])
 
     def get_translation(self, phrase):
         while True:
             try:
-                translation = self.translator.translate(phrase, src='en', dest='pl')
+                translation = self.translator.translate(phrase, src="en", dest="pl")
                 break
             except ConnectionError:
                 return ["Network connection error."]

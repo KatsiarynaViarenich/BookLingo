@@ -9,7 +9,6 @@ class UserSession:
         self.session = session
         self.user_id = user_id
 
-
     def add_connection(self, book_id):
         user = self.session.query(User).get(self.user_id)
         book = self.session.query(Book).get(book_id)
@@ -22,7 +21,9 @@ class UserSession:
             print(f"Book with ID {book_id} does not exist.")
             return
 
-        connection = Connection(user=user, book=book, date_added=datetime.now(), page_number=0)
+        connection = Connection(
+            user=user, book=book, date_added=datetime.now(), page_number=0
+        )
         self.session.add(connection)
         self.session.commit()
         print(f"Connection added: User {user.name} <-> Book {book.title}")
@@ -38,17 +39,87 @@ class UserSession:
         self.session.commit()
         print("Connection removed.")
 
+    def get_connections(self):
+        return self.session.query(Connection).all()
+
+    # def open_book(self, book_id):
+    #     book = self.session.query(Book).get(book_id)
+    #     if book is None:
+    #         print(f"Book with ID {book_id} does not exist.")
+    #         return
+    #
+    #     print(f"Opening book: {book.title}")
+    #     return BookSession(self.session, book_id, self.user_id)
+
     def open_book(self, book_id):
         book = self.session.query(Book).get(book_id)
         if book is None:
             print(f"Book with ID {book_id} does not exist.")
             return
-
+        page_number = (
+            self.session.query(Connection)
+            .filter(Connection.user_id == self.user_id)
+            .filter(Connection.book_id == book_id)
+            .first()
+            .page_number
+        )
         print(f"Opening book: {book.title}")
-        return BookSession(self.session, book_id, self.user_id)
+        return BookSession(self.session, book_id, self.user_id, page_number)
 
-    def get_connections(self):
-        return self.session.query(Connection).all()
+    def get_user_books(self, sort_by=Book.title, filter_by=None):
+        books = (
+            self.session.query(Book)
+            .join(Connection)
+            .filter(Connection.user_id == self.user_id)
+            .order_by(sort_by)
+            .all()
+        )
+        if filter_by is not None:
+            books = [book for book in books if filter_by in book.title]
+        return books
+
+    def get_other_books(self, sort_by=Book.title, filter_by=None):
+        books = self.get_user_books()
+        other_books = (
+            self.session.query(Book)
+            .filter(~Book.id.in_([book.id for book in books]))
+            .order_by(sort_by)
+            .all()
+        )
+        if filter_by is not None:
+            other_books = [book for book in books if filter_by in book.title]
+        return other_books
+
+    ### OLD CODE ###
+
+    # def get_user_books(self):
+    #     return self.session.query(Book).join(Connection).filter(Connection.user_id == self.user_id).all()
+    #
+    # def get_other_books(self):
+    #     return self.session.query(Book).join(Connection).filter(Connection.user_id != self.user_id).all()
+
+    def get_user_quotes(self):
+        quotes = self.session.query(Quote).filter_by(user_id=self.user_id).all()
+        quotes_info = []
+        for quote in quotes:
+            quotes_info.append(self.get_quote_info(quote.id))
+        return quotes_info
+
+    def get_quote_info(self, quote_id):
+        quote = self.session.query(Quote).get(quote_id)
+        book = self.session.query(Book).get(quote.book_id)
+        return book.title, book.author, quote.quote
+
+    def remove_quotes(self, quote_id):
+        quote = self.session.query(Quote).get(quote_id)
+
+        if quote is None:
+            print(f"Quote with ID {quote_id} does not exist.")
+            return
+
+        self.session.delete(quote)
+        self.session.commit()
+        print("Quote removed.")
 
     # def get_user_connections(self):
     #     return self.session.query(Connection).filter_by(user_id=self.user_id).all()
@@ -56,5 +127,6 @@ class UserSession:
     # def get_user_books(self):
     #     return self.session.query(Book).join(Connection).filter(Connection.user_id == self.user_id).all()
     #
-    def get_user_quotes(self):
-        return self.session.query(Quote).filter_by(user_id=self.user_id).all()
+
+    # def get_user_quotes(self):
+    #     return self.session.query(Quote).filter_by(user_id=self.user_id).all()

@@ -1,4 +1,3 @@
-from transformers import pipeline
 import requests
 
 
@@ -15,14 +14,21 @@ class QuestionGenerator:
 
     def generate_questions(self, text):
         passage_length = int(len(text) / 2)
-        passages = [text[i:i + passage_length] for i in range(0, len(text), passage_length)]
+        passages = [
+            text[i : i + passage_length] for i in range(0, len(text), passage_length)
+        ]
         try:
             output = []
             for passage in passages:
-                output.append(self.query({
-                    "inputs": passage,
-                })[0]['generated_text'][10:])
+                output.append(
+                    self.query(
+                        {
+                            "inputs": passage,
+                        }
+                    )[0][
+                        "generated_text"
+                    ][10:]
+                )
         except ConnectionError:
             return ["Network connection error."]
         return output
-

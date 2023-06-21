@@ -1,5 +1,6 @@
 import wikipedia
 
+
 def search_wikipedia(query):
     try:
         results = wikipedia.search(query)

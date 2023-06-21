@@ -2,7 +2,7 @@ import ebooklib
 from bs4 import BeautifulSoup
 from ebooklib import epub
 
-from services.database_setup import Book, User, Quote, Connection
+from services.database_setup import Book, Connection, Quote, User
 
 
 def split_book_into_pages(book_path, characters_per_page=1000):
@@ -12,8 +12,8 @@ def split_book_into_pages(book_path, characters_per_page=1000):
     for item in book.get_items():
         if item.get_type() == ebooklib.ITEM_DOCUMENT:
             content = item.get_content()
-            soup = BeautifulSoup(content, 'html.parser')
-            clean_text = soup.get_text(separator=' ')
+            soup = BeautifulSoup(content, "html.parser")
+            clean_text = soup.get_text(separator=" ")
 
             page_count = len(clean_text) // characters_per_page + 1
             for i in range(page_count):
@@ -52,7 +52,12 @@ class BookSession:
         print(f"Quote added: User {user.name} <-> Book {book.title}")
 
     def update_page_number(self, page_number):
-        connection = self.session.query(Connection).filter(Connection.user_id == self.user_id).filter(Connection.book_id == self.book_id).first()
+        connection = (
+            self.session.query(Connection)
+            .filter(Connection.user_id == self.user_id)
+            .filter(Connection.book_id == self.book_id)
+            .first()
+        )
         connection.page_number = page_number
         self.session.commit()
         print(f"Page number updated: {page_number}")
