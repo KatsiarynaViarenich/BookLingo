@@ -1,3 +1,5 @@
+import re
+
 import ebooklib
 from bs4 import BeautifulSoup
 from ebooklib import epub
@@ -8,20 +10,26 @@ from services.database_setup import Book, Connection, Quote, User
 def split_book_into_pages(book_path, characters_per_page=1000):
     book = epub.read_epub(book_path)
     pages = []
+    page_content = ""
 
     for item in book.get_items():
         if item.get_type() == ebooklib.ITEM_DOCUMENT:
             content = item.get_content()
             soup = BeautifulSoup(content, "html.parser")
             clean_text = soup.get_text(separator=" ")
+            clean_text = re.sub('\n{2,}', '\n', clean_text)
+            clean_text = clean_text.rstrip('\n')
+            words = clean_text.split()
 
-            page_count = len(clean_text) // characters_per_page + 1
-            for i in range(page_count):
-                start = i * characters_per_page
-                end = (i + 1) * characters_per_page
-                page_content = clean_text[start:end]
-                pages.append(page_content)
+            for word in words:
+                if len(page_content) + len(word) + 1 <= characters_per_page:
+                    page_content += word + " "
+                else:
+                    pages.append(page_content.strip())
+                    page_content = word + " "
 
+            if page_content:
+                pages.append(page_content.strip())
     return pages
 
 
