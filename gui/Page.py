@@ -103,6 +103,7 @@ class Ui_PageMainWindow(object):
         self.PageslineEdit.setObjectName("PageslineEdit")
         self.PageslineEdit.setGeometry(QRect(250, 15, 113, 21))
         self.PageslineEdit.setAlignment(Qt.AlignCenter)
+        self.PageslineEdit.setReadOnly(True)
         self.PageslineEdit.setStyleSheet(
             " border: none;\n" "    box-shadow: none; background-color: #faf5ea;\n"
         )

@@ -31,7 +31,7 @@ class Ui_NotLogedMainWindow(object):
         self.textEdit = QTextEdit(self.centralwidget)
         self.textEdit.setObjectName("textEdit")
         self.textEdit.setGeometry(QRect(110, 200, 571, 71))
-        self.textEdit.setStyleSheet(" border: none;\n" "    box-shadow: none;")
+        self.textEdit.setStyleSheet(" border: none;\n" "    box-shadow: none; ")
         self.frame_2 = QFrame(self.centralwidget)
         self.frame_2.setObjectName("frame_2")
         self.frame_2.setGeometry(QRect(110, 310, 571, 80))

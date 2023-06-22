@@ -60,10 +60,12 @@ class Ui_LoginPageMainWindow(object):
         self.passLine.setObjectName("lineEdit_2")
         self.passLine.setGeometry(QRect(150, 190, 371, 31))
         self.textEdit_2 = QTextEdit(self.frame)
+        self.textEdit_2.setReadOnly(True)
         self.textEdit_2.setObjectName("textEdit_2")
         self.textEdit_2.setGeometry(QRect(10, 140, 121, 87))
         self.textEdit = QTextEdit(self.frame)
         self.textEdit.setObjectName("textEdit")
+        self.textEdit.setReadOnly(True)
         self.textEdit.setGeometry(QRect(20, 10, 491, 87))
 
         self.retranslateUi(NotLogedMainWindow)
@@ -102,7 +104,7 @@ class Ui_LoginPageMainWindow(object):
                 '<html><head><meta name="qrichtext" content="1" /><style type="text/css">\n'
                 "p, li { white-space: pre-wrap; }\n"
                 "</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:7.8pt; font-weight:400; font-style:normal;\">\n"
-                '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Write your login or e-mail and password or press register, if you have no account.</p></body></html>',
+                '<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; font-size:12pt; text-indent:0px;">Write your login or e-mail and password or press register, if you have no account.</p></body></html>',
                 None,
             )
         )
