@@ -84,6 +84,8 @@ class Ui_RegisterQMainWindow(object):
                 None,
             )
         )
+        self.textEdit_2.setReadOnly(True)
+        self.textEdit.setReadOnly(True)
         self.textEdit.setHtml(
             QCoreApplication.translate(
                 "RegisterQMainWindow",

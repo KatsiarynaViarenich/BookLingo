@@ -60,10 +60,11 @@ class MainWindow(QMainWindow):
         self.ui_page.setupUi(self)
 
     def open_tab(self, index):
-        if self.ui_log == self.ui_logPage or self.ui_log == self.ui_register:
+        if self.ui_log == self.ui_logPage:
             if index not in [0, 1]:
                 self.logOut()
                 self.ui.tabWidget.setCurrentIndex(0)
+
         elif self.ui_log == self.ui_notloged:
             if index not in [0, 1]:
                 QMessageBox.warning(
@@ -126,7 +127,7 @@ class MainWindow(QMainWindow):
             self.registerPage()
         else:
             print(f"{username},{password}")
-            self.ui.tabWidget.setCurrentIndex(0)
+            self.logOut()
 
     def registerPage(self):
         tab_index = 1
@@ -137,7 +138,6 @@ class MainWindow(QMainWindow):
 
         self.ui_log.setupUi(self.ui.tab_account)
         self.ui_log.RegisterButton.clicked.connect(self.authorization_create_acc)
-
         self.ui.tabWidget.setCurrentIndex(tab_index)
 
     def logIn(self):
@@ -237,7 +237,7 @@ class MainWindow(QMainWindow):
                 book.page_number+=1
                 book.update_page_number(book.page_number)
                 self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-                self.ui_page.PageslineEdit.setText(book.page_number)
+                self.ui_page.PageslineEdit.setText(str(book.page_number+1))
 
     def prev_page(self, book):
         book_name = self.ui_page.AuthorNametextEdit.toPlainText()
@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
                 book=book.data()
                 book.page_number-=1
                 self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-                self.ui_page.PageslineEdit.setText(str(book.page_number))
+                self.ui_page.PageslineEdit.setText(str(book.page_number+1))
 
     def close_book(self):
         book_name = self.ui_page.AuthorNametextEdit.toPlainText()
@@ -367,7 +367,8 @@ class MainWindow(QMainWindow):
         if not selected_indexes:
             return
         quote_model.removeRow(selected_indexes[0].row())
-        self.user.remove_quotes()
+
+        self.user.remove_quotes(selected_indexes[0])
         self.ui.FavoritelistView.setModel(quote_model)
 
 
