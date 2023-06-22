@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
 
         self.ui_log.setupUi(self.ui.tab_account)
         self.ui_log.LogInButton.clicked.connect(self.authorization_login)
-        self.ui_log.RegisterButton.clicked.connect(self.registerPage)
+        self.ui_log.RegisterButton.clicked.connect(self.authorization_create_acc)
 
         self.ui.tabWidget.setCurrentIndex(tab_index)
 
@@ -236,8 +236,9 @@ class MainWindow(QMainWindow):
 
 
     def close_book(self):
-        self.opened_book.data().update_page_number(self.opened_book.data().page_number)
-        self.opened_book=None
+        if self.opened_book is not None:
+            self.opened_book.data().update_page_number(self.opened_book.data().page_number)
+            self.opened_book=None
         current_index = self.ui.tabWidget.currentIndex()
         self.ui.tabWidget.removeTab(current_index)
 
