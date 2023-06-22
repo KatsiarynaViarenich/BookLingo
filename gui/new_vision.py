@@ -17,7 +17,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
                            QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QListView, QMainWindow,
                                QPlainTextEdit, QPushButton, QSizePolicy,
-                               QTabWidget, QTextEdit, QWidget)
+                               QTabWidget, QTextEdit, QWidget, QAbstractItemView)
 
 
 class Ui_MainWindow(object):
@@ -71,6 +71,7 @@ class Ui_MainWindow(object):
         self.FavoritelistView = QListView(self.tab_fav)
         self.FavoritelistView.setObjectName("FavoritelistView")
         self.FavoritelistView.setGeometry(QRect(70, 100, 651, 381))
+        self.FavoritelistView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.FavoritelistView.setStyleSheet(
             "background: #faf5ea;\n" " border: none;\n" "    box-shadow: none;"
         )
@@ -90,6 +91,7 @@ class Ui_MainWindow(object):
         self.tab_mybooks.setObjectName("my books")
         self.MyBookslistView = QListView(self.tab_mybooks)
         self.MyBookslistView.setObjectName("MyBookslistView")
+        self.MyBookslistView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.MyBookslistView.setGeometry(QRect(70, 100, 651, 381))
         self.MyBookslistView.setStyleSheet(
             "background: #faf5ea;\n" " border: none;\n" "    box-shadow: none;"
@@ -131,6 +133,7 @@ class Ui_MainWindow(object):
         self.FoundBookslistView = QListView(self.tab_find)
         self.FoundBookslistView.setObjectName("FoundBookslistView")
         self.FoundBookslistView.setGeometry(QRect(70, 100, 651, 381))
+        self.FoundBookslistView.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.FoundBookslistView.setStyleSheet(
             "background: #faf5ea;\n" " border: none;\n" "    box-shadow: none;"
         )

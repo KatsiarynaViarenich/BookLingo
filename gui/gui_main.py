@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui_page=Ui_PageMainWindow()
-        self.books=[]
+        self.opened_book=None
         self.ui_page = Ui_PageMainWindow()
 
         self.ui_loged = Ui_LogedQMainWindow()
@@ -60,10 +60,12 @@ class MainWindow(QMainWindow):
         self.ui_page.setupUi(self)
 
     def open_tab(self, index):
-        if self.ui_log == self.ui_logPage:
+        if self.ui_log == self.ui_logPage or self.ui_log==self.ui_register:
             if index not in [0, 1]:
                 self.logOut()
                 self.ui.tabWidget.setCurrentIndex(0)
+            elif index==0 and self.ui_log==self.ui_register:
+                self.logOut()
 
         elif self.ui_log == self.ui_notloged:
             if index not in [0, 1]:
@@ -172,8 +174,10 @@ class MainWindow(QMainWindow):
             self.load_users_things()
             for index in range(self.ui.tabWidget.count(), 5, -1):
                 self.ui.tabWidget.removeTab(index - 1)
-            self.books = []
+            self.opened_book = None
             self.user = None
+            self.close_book()
+            self.ui_page=None
         tab_index = 1
         self.ui.tabWidget.removeTab(tab_index)
         self.ui.tab_account = QWidget()
@@ -196,23 +200,24 @@ class MainWindow(QMainWindow):
         self.ui_page.setupUi(page_widget)
         self.ui.tabWidget.addTab(page_widget, book_session_item.text())
 
-        self.books.append(book_session_item)
+        self.opened_book=book_session_item
         self.ui_page.AuthorNametextEdit.setText(book_session_item.text())
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.count() - 1)
 
         self.ui_page.textEdit.setText(book_session_obj.book_pages[book_session_obj.page_number])
-        self.ui_page.PageslineEdit.setText(str(book_session_obj.page_number))
+        self.ui_page.PageslineEdit.setText(str(book_session_obj.page_number+1))
         self.ui_page.closeButton.clicked.connect(self.close_book)
 
-        self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book_session_obj))
-        self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book_session_obj))
+        self.ui_page.nextPageButton.clicked.connect(self.next_page)
+        self.ui_page.prevPageButton.clicked.connect(self.prev_page)
         self.ui_page.questionsButton.clicked.connect(self.check_understanding)
-        self.ui_page.addQuoteButton.clicked.connect(lambda :self.add_quote(book_session_obj))
+        self.ui_page.addQuoteButton.clicked.connect(self.add_quote)
         self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
         self.ui_page.translateButton.clicked.connect(self.translate_text)
         self.ui_page.wikipediaButton.clicked.connect(self.open_wikipedia)
 
-    def next_page(self,book):
+    def next_page(self):
+        book=self.opened_book.data()
         if book.page_number<book.book_pages.__len__()-1:
             print(str(book.page_number))
             book.page_number= book.page_number+1
@@ -221,7 +226,8 @@ class MainWindow(QMainWindow):
             print(book.page_number)
 
 
-    def prev_page(self,book):
+    def prev_page(self):
+        book=self.opened_book.data()
         if book.page_number>0:
             book.page_number=book.page_number-1
             book.update_page_number(book.page_number)
@@ -229,32 +235,9 @@ class MainWindow(QMainWindow):
             self.ui_page.PageslineEdit.setText(str(book.page_number))
 
 
-    def next_page(self, book):
-        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
-        for book in self.books:
-            if book_name == book.text():
-                book=book.data()
-                book.page_number+=1
-                book.update_page_number(book.page_number)
-                self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-                self.ui_page.PageslineEdit.setText(str(book.page_number+1))
-
-    def prev_page(self, book):
-        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
-        for book in self.books:
-            if book_name==book.text():
-                book=book.data()
-                book.page_number-=1
-                self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-                self.ui_page.PageslineEdit.setText(str(book.page_number+1))
-
     def close_book(self):
-        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
-        for book in self.books:
-            if book.text() == book_name:
-                book.update_page_number(book.page_number)
-                self.books.remove(book)
-                break
+        self.opened_book.data().update_page_number(self.opened_book.data().page_number)
+        self.opened_book=None
         current_index = self.ui.tabWidget.currentIndex()
         self.ui.tabWidget.removeTab(current_index)
 
@@ -273,7 +256,7 @@ class MainWindow(QMainWindow):
             book_session=BookSession(self.session,book.id,self.user.user_id)
             item = QStandardItem()
             item.setData(book_session)
-            item.setText(f'"{book.title}" - {book.author}')
+            item.setText(f'{book.title} - {book.author}')
             mybooks_model.appendRow(item)
         self.ui.MyBookslistView.setModel(mybooks_model)
         self.ui.MyBookslistView.setSelectionMode(QListView.ExtendedSelection)
@@ -282,7 +265,7 @@ class MainWindow(QMainWindow):
         for quote in self.user.get_user_quotes():  ##?
             item = QStandardItem()
             item.setData(quote)
-            item.setText(f"\'{quote[2]}\' - {quote[1]}, {quote[0]}")
+            item.setText(f"\'{quote[2]}\' - {quote[1]} - {quote[0]}")
             quotes_model.appendRow(item)
         self.ui.FavoritelistView.setModel(quotes_model)
         self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
@@ -346,16 +329,20 @@ class MainWindow(QMainWindow):
     def open_wikipedia(self):
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
         result=wikipedia_search.search_wikipedia(selected_text)
-        QMessageBox.warning(self,"Wikipedia",f"{result}")
+        QMessageBox.information(self,"Wikipedia",f"{result}")
 
 
-    def add_quote(self,book):
+    def add_quote(self):
+        book=self.opened_book.data()
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
         book.add_quote(selected_text)
 
         quote_model = self.ui.FavoritelistView.model()
 
-        item = QStandardItem(selected_text)
+        item = QStandardItem()
+        quote=Quote(book_id=book.book_id,user_id=self.user.user_id,quote=selected_text)
+        item.setData(quote)
+        item.setText(f"\'{quote.quote}\' - {self.opened_book.text()}")
         quote_model.appendRow(item)
 
         self.ui.FavoritelistView.setModel(quote_model)
@@ -366,9 +353,11 @@ class MainWindow(QMainWindow):
         selected_indexes = self.ui.MyBookslistView.selectedIndexes()
         if not selected_indexes:
             return
+        item=quote_model.itemFromIndex(selected_indexes[0]).data()
+
         quote_model.removeRow(selected_indexes[0].row())
 
-        self.user.remove_quotes(selected_indexes[0])
+        self.user.remove_quotes(item.id)
         self.ui.FavoritelistView.setModel(quote_model)
 
 
