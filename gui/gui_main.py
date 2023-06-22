@@ -355,7 +355,7 @@ class MainWindow(QMainWindow):
             return
         item=quote_model.itemFromIndex(selected_indexes[0]).data()
 
-        quote_model.removeRow(selected_indexes[0].row())
+        quote_model.removeRow(selected_indexes[0].row()) #говно
 
         self.user.remove_quotes(item.id)
         self.ui.FavoritelistView.setModel(quote_model)
