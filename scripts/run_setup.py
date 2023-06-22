@@ -15,6 +15,7 @@ class User(Base):
     name = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
     connections = relationship("Connection", back_populates="user")
+    last_login = Column(DateTime, nullable=False)
 
     def set_password(self, password):
         hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
