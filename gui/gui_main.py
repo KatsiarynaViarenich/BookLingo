@@ -184,41 +184,27 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.setCurrentIndex(tab_index)
 
     def open_book(self):
-        library_model = self.ui.FoundBookslistView.model()
         selected_indexes = self.ui.MyBookslistView.selectedIndexes()
         if not selected_indexes:
             return
-        my_books_model = self.ui.MyBookslistView.model()
-        book_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0])
-        book_name = book_item.text().split(" - ")
-        book_name[0] = book_name[0].replace('"', "")
-        book_name[1] = book_name[1]
-        print(book_name)
+        book_session_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0])
+        book_session_obj = book_session_item.data()
         page_widget = QWidget()
         self.ui_page.setupUi(page_widget)
-        self.ui.tabWidget.addTab(page_widget, book_item.text())
+        self.ui.tabWidget.addTab(page_widget, book_session_item.text())
 
-        book = None
-        for b in self.user.get_user_books():
-            if b.title == book_name[0] and b.author == book_name[1]:
-                book = BookSession(self.session, b.id, self.user.user_id)
-                break
-        if book != None:
-            self.books.append(b)
-            self.ui_page.AuthorNametextEdit.setText(f"{b.title} - {b.author}")
-        else:
-            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
-
+        self.books.append(book_session_item)
+        self.ui_page.AuthorNametextEdit.setText(book_session_item.text())
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.count() - 1)
 
-        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
-        self.ui_page.PageslineEdit.setText(str(book.page_number))
+        self.ui_page.textEdit.setText(book_session_obj.book_pages[book_session_obj.page_number])
+        self.ui_page.PageslineEdit.setText(str(book_session_obj.page_number))
         self.ui_page.closeButton.clicked.connect(self.close_book)
 
-        self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book))
-        self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book))
+        self.ui_page.nextPageButton.clicked.connect(lambda : self.next_page(book_session_obj))
+        self.ui_page.prevPageButton.clicked.connect(lambda : self.prev_page(book_session_obj))
         self.ui_page.questionsButton.clicked.connect(self.check_understanding)
-        self.ui_page.addQuoteButton.clicked.connect(lambda :self.add_quote(book))
+        self.ui_page.addQuoteButton.clicked.connect(lambda :self.add_quote(book_session_obj))
         self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
         self.ui_page.translateButton.clicked.connect(self.translate_text)
         self.ui_page.wikipediaButton.clicked.connect(self.open_wikipedia)
@@ -248,11 +234,9 @@ class MainWindow(QMainWindow):
         self.ui_page.textEdit.setText(book.book_pages[book.page_number])
 
     def close_book(self):
-        book_name = self.ui_page.AuthorNametextEdit.toPlainText().split(" - ")
-        book_name[0] = book_name[0].replace('"', "")
-        book_name[1] = book_name[1]
+        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
         for book in self.books:
-            if book.title == book_name[0] and book.author == book_name[1]:
+            if book.text() == book_name:
                 self.books.remove(book)
                 break
         current_index = self.ui.tabWidget.currentIndex()
@@ -261,21 +245,28 @@ class MainWindow(QMainWindow):
     def load_users_things(self):
         library_model = QStandardItemModel()
         for book in self.user.get_other_books():  ##?
-            item = QStandardItem(f'"{book.title}" - {book.author}')
+            item = QStandardItem()
+            item.setData(book)
+            item.setText(f"\'{book.title}\' - {book.author}")
             library_model.appendRow(item)
         self.ui.FoundBookslistView.setModel(library_model)
         self.ui.FoundBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
         mybooks_model = QStandardItemModel()
-        for book in self.user.get_user_books():  ##?
-            item = QStandardItem(f'"{book.title}" - {book.author}')
+        for book in self.user.get_user_books():
+            book_session=BookSession(self.session,book.id,self.user.user_id)
+            item = QStandardItem()
+            item.setData(book_session)
+            item.setText(f'"{book.title}" - {book.author}')
             mybooks_model.appendRow(item)
         self.ui.MyBookslistView.setModel(mybooks_model)
         self.ui.MyBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
         quotes_model = QStandardItemModel()
         for quote in self.user.get_user_quotes():  ##?
-            item = QStandardItem(quote[2])
+            item = QStandardItem()
+            item.setData(quote)
+            item.setText(f"\'{quote[2]}\' - {quote[1]}, {quote[0]}")
             quotes_model.appendRow(item)
         self.ui.FavoritelistView.setModel(quotes_model)
         self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
@@ -292,32 +283,20 @@ class MainWindow(QMainWindow):
         if not selected_indexes:
             return
         my_books_model = self.ui.MyBookslistView.model()
-        book_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0])
-        book_name = book_item.text().split(" - ")
-        book_name[0] = book_name[0].replace('"', "")
-        book_name[1] = book_name[1]
-        print(book_name)
+        book_session_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0]).data()
+        self.user.remove_connection(book_session_item.book_id)
 
-        """
-        тут будет бред коня, поиск по не своим книгам
-        """
-        book = None
-        for b in self.user.get_user_books():
-            if b.title == book_name[0] and b.author == book_name[1]:
-                book = b
+        books = self.user.get_user_books()
+        for book in books:
+            if book.id==book_session_item.book_id:
+                book_item=QStandardItem()
+                book_item.setData(book)
+                book_item.setText(f"\'{book.title}\' - {book.author}")
+                self.user.remove_connection(book.id)
+                library_model.appendRow(book_item)
                 break
-        if book != None:
-            for connection in b.connections:
-                if (
-                    connection.book_id == b.id
-                    and self.user.user_id == connection.user_id
-                ):
-                    self.user.remove_connection(book.id)
-                    library_model.appendRow(book_item.clone())
-                    my_books_model.removeRow(selected_indexes[0].row())
-                    break
-        else:
-            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
+
+        my_books_model.removeRow(selected_indexes[0].row())
 
         self.ui.MyBookslistView.setModel(my_books_model)
         self.ui.FoundBookslistView.setModel(library_model)
@@ -328,32 +307,15 @@ class MainWindow(QMainWindow):
         if not selected_indexes:
             return
         my_books_model = self.ui.MyBookslistView.model()
-        book_item = self.ui.FoundBookslistView.model().itemFromIndex(
-            selected_indexes[0]
-        )
-        book_name = book_item.text().split(" - ")
-        book_name[0] = book_name[0].replace('"', "")
-        book_name[1] = book_name[1]
-        print(book_name)
+        book_item = self.ui.FoundBookslistView.model().itemFromIndex(selected_indexes[0]).data()
 
-        """
-        тут будет бред коня, поиск по не своим книгам
-        """
-        book = None
-        for b in self.user.get_other_books():
-            if b.title == book_name[0] and b.author == book_name[1]:
-                book = b
-                break
-        if book != None:
-            self.user.add_connection(book.id)
-            book_session = BookSession(self.session, book.id, self.user.user_id)
-
-            book_item = QStandardItem(f'"{book.title}" - {book.author}')
-            my_books_model.appendRow(book_item)
-            library_model.removeRow(selected_indexes[0].row())
-        else:
-            QMessageBox.warning(self, "Oops..", "Something went wrong :(")
-
+        self.user.add_connection(book_item.id)
+        book_session = BookSession(self.session, book_item.id, self.user.user_id)
+        book_session_item = QStandardItem()
+        book_session_item.setData(book_session)
+        book_session_item.setText(f"\'{book_item.title}\' - {book_item.author}")
+        my_books_model.appendRow(book_session_item)
+        library_model.removeRow(selected_indexes[0].row())
         self.ui.MyBookslistView.setModel(my_books_model)
         self.ui.FoundBookslistView.setModel(library_model)
 
@@ -389,19 +351,14 @@ class MainWindow(QMainWindow):
         if not selected_indexes:
             return
         quote_model.removeRow(selected_indexes[0].row())
-        #self.user.remove_quotes()
+        self.user.remove_quotes()
         self.ui.FavoritelistView.setModel(quote_model)
 
 
     def check_understanding(self):
         selected_text = self.ui_page.textEdit.toPlainText()
         print(selected_text)
-        if selected_text:
-            QMessageBox.warning(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\n"
-                                                 f"Fancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
-        else:
-            QMessageBox.warning(self, "oops","Page is empty.")
-
+        QMessageBox.information(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\nFancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
 
 
 if __name__ == "__main__":
