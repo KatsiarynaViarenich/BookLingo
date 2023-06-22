@@ -35,20 +35,17 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
 
         self.user = None
-        """
-        Is session must be inside? 
-        """
+
         engine = create_engine("sqlite:///../data/app.db")
         Session = sessionmaker(bind=engine)
         self.session = Session()
         self.ap = AuthorizingProcess(self.session)
+
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui_page=Ui_PageMainWindow()
         self.books=[]
         self.ui_page = Ui_PageMainWindow()
-
-        self.books = []
 
         self.ui_loged = Ui_LogedQMainWindow()
         self.ui_notloged = Ui_NotLogedMainWindow()
@@ -75,6 +72,12 @@ class MainWindow(QMainWindow):
                 self.ui.tabWidget.setCurrentIndex(0)
             else:
                 self.ui.tabWidget.setCurrentIndex(index)
+        if self.ui.tabWidget.count()==6:
+            self.ui.readMyBookButton.setEnabled(False)
+        else:
+            self.ui.readMyBookButton.setEnabled(True)
+
+
 
     def account_buttons(self):
         if self.ui_log == self.ui_loged:
@@ -211,32 +214,45 @@ class MainWindow(QMainWindow):
 
     def next_page(self,book):
         if book.page_number<book.book_pages.__len__()-1:
-            book.page_number+=1
-            book.update_page_number(book.page_number)
+            print(str(book.page_number))
+            book.page_number= book.page_number+1
             self.ui_page.textEdit.setText(book.book_pages[book.page_number])
             self.ui_page.PageslineEdit.setText(str(book.page_number))
+            print(book.page_number)
+
 
     def prev_page(self,book):
         if book.page_number>0:
-            book.page_number-=1
+            book.page_number=book.page_number-1
             book.update_page_number(book.page_number)
             self.ui_page.textEdit.setText(book.book_pages[book.page_number])
             self.ui_page.PageslineEdit.setText(str(book.page_number))
 
+
     def next_page(self, book):
-        book.page_number+=1
-        book.update_page_number(book.page_number)
-        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
+        for book in self.books:
+            if book_name == book.text():
+                book=book.data()
+                book.page_number+=1
+                book.update_page_number(book.page_number)
+                self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+                self.ui_page.PageslineEdit.setText(book.page_number)
 
     def prev_page(self, book):
-        book.page_number-=1
-        book.update_page_number(book.page_number - 1)
-        self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+        book_name = self.ui_page.AuthorNametextEdit.toPlainText()
+        for book in self.books:
+            if book_name==book.text():
+                book=book.data()
+                book.page_number-=1
+                self.ui_page.textEdit.setText(book.book_pages[book.page_number])
+                self.ui_page.PageslineEdit.setText(str(book.page_number))
 
     def close_book(self):
         book_name = self.ui_page.AuthorNametextEdit.toPlainText()
         for book in self.books:
             if book.text() == book_name:
+                book.update_page_number(book.page_number)
                 self.books.remove(book)
                 break
         current_index = self.ui.tabWidget.currentIndex()
