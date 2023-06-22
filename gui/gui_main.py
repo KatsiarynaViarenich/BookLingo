@@ -265,7 +265,7 @@ class MainWindow(QMainWindow):
         for quote in self.user.get_user_quotes():  ##?
             item = QStandardItem()
             item.setData(quote)
-            item.setText(f"\'{quote[2]}\' - {quote[1]} - {quote[0]}")
+            item.setText(f"\'{quote.book_id}\' - {quote.quote} - {quote.user_id}")
             quotes_model.appendRow(item)
         self.ui.FavoritelistView.setModel(quotes_model)
         self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
@@ -350,16 +350,13 @@ class MainWindow(QMainWindow):
 
     def delete_quote(self):
         quote_model = self.ui.FavoritelistView.model()
-        selected_indexes = self.ui.MyBookslistView.selectedIndexes()
+        selected_indexes = self.ui.FavoritelistView.selectedIndexes()
         if not selected_indexes:
             return
-        item=quote_model.itemFromIndex(selected_indexes[0]).data()
-
-        quote_model.removeRow(selected_indexes[0].row()) #говно
-
-        self.user.remove_quotes(item.id)
-        self.ui.FavoritelistView.setModel(quote_model)
-
+        quote_item = quote_model.itemFromIndex(selected_indexes[0]).data()
+        self.user.remove_quotes(quote_item.id)
+        quote_model.removeRow(selected_indexes[0].row())
+        self.ui.MyBookslistView.setModel(quote_model)
 
     def check_understanding(self):
         selected_text = self.ui_page.textEdit.toPlainText()

@@ -28,7 +28,8 @@ class UserSession:
         self.session.commit()
         print(f"Connection added: User {user.name} <-> Book {book.title}")
 
-    def remove_connection(self, connection_id):
+    def remove_connection(self, book_id):
+        connection_id = self.session.query(Connection).filter_by(book_id=book_id).first().id
         connection = self.session.query(Connection).get(connection_id)
 
         if connection is None:
@@ -100,15 +101,7 @@ class UserSession:
 
     def get_user_quotes(self):
         quotes = self.session.query(Quote).filter_by(user_id=self.user_id).all()
-        quotes_info = []
-        for quote in quotes:
-            quotes_info.append(self.get_quote_info(quote.id))
-        return quotes_info
-
-    def get_quote_info(self, quote_id):
-        quote = self.session.query(Quote).get(quote_id)
-        book = self.session.query(Book).get(quote.book_id)
-        return book.title, book.author, quote.quote
+        return quotes
 
     def remove_quotes(self, quote_id):
         quote = self.session.query(Quote).get(quote_id)
