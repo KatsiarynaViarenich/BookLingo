@@ -174,10 +174,11 @@ class MainWindow(QMainWindow):
             self.load_users_things()
             # for index in range(self.ui.tabWidget.count(), 5, -1):
             #     self.ui.tabWidget.removeTab(index - 1)
-            self.opened_book = None
-            self.user = None
-            self.close_book()
-            self.ui_page=None
+            if self.opened_book is not None:
+                self.opened_book = None
+                self.user = None
+                self.close_book()
+                self.ui_page=None
             self.ui.FavoritelistView.model().clear()
             self.ui.MyBookslistView.model().clear()
             self.ui.FoundBookslistView.model().clear()
