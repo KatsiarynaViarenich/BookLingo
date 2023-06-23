@@ -172,8 +172,8 @@ class MainWindow(QMainWindow):
     def logOut(self):
         if self.user != None:
             self.load_users_things()
-            for index in range(self.ui.tabWidget.count(), 5, -1):
-                self.ui.tabWidget.removeTab(index - 1)
+            # for index in range(self.ui.tabWidget.count(), 5, -1):
+            #     self.ui.tabWidget.removeTab(index - 1)
             self.opened_book = None
             self.user = None
             self.close_book()
@@ -243,6 +243,7 @@ class MainWindow(QMainWindow):
     def close_book(self):
         if self.opened_book is not None:
             self.opened_book.data().update_page_number(self.opened_book.data().page_number)
+            self.ui_page = None
             self.opened_book=None
         current_index = self.ui.tabWidget.currentIndex()
         self.ui.tabWidget.removeTab(current_index)
@@ -372,7 +373,7 @@ class MainWindow(QMainWindow):
         from modules.phrase_translation import PhraseTranslation
         PhraseTranslation_obj = PhraseTranslation()
         translation = PhraseTranslation_obj.get_translation(selected_text)
-        QMessageBox.warning(self,"Translation",f"{selected_text} - {translation}")
+        QMessageBox.warning(self,"Translation",f" Original text: {selected_text} \n Translated text: {translation}")
 
     def open_wikipedia(self):
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
@@ -408,8 +409,7 @@ class MainWindow(QMainWindow):
 
     def check_understanding(self):
         selected_text = self.ui_page.textEdit.toPlainText()
-        print(selected_text)
-        QMessageBox.information(self, "Hey", f"Questions:\n{QuestionGenerator.generate_questions(selected_text)}\nFancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
+        QMessageBox.information(self, "Hey", f"Questions:\n{QuestionGenerator().generate_questions(selected_text)}\nFancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}")
 
 
 if __name__ == "__main__":
