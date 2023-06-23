@@ -244,7 +244,7 @@ class MainWindow(QMainWindow):
     def close_book(self):
         if self.opened_book is not None:
             self.opened_book.data().update_page_number(self.opened_book.data().page_number)
-            self.ui_page = None
+            # self.ui_page = None
             self.opened_book=None
         current_index = self.ui.tabWidget.currentIndex()
         self.ui.tabWidget.removeTab(current_index)

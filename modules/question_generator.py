@@ -20,15 +20,16 @@ class QuestionGenerator:
         try:
             output = []
             for passage in passages:
-                output.append(
-                    self.query(
-                        {
+                result = self.query({
                             "inputs": passage,
                         }
                     )[0][
                         "generated_text"
                     ][10:]
-                )
+                if result[-1] == "?":
+                    output.append(result)
+            if output is None:
+                output = ["There are no good questions."]
         except ConnectionError:
             return ["Network connection error."]
         except Exception as e:

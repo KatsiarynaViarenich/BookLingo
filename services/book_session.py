@@ -7,7 +7,7 @@ from ebooklib import epub
 from services.database_setup import Book, Connection, Quote, User
 
 
-def split_book_into_pages(book_path, characters_per_page=1000):
+def split_book_into_pages(book_path, characters_per_page=1500):
     book = epub.read_epub(book_path)
     pages = []
     page_content = ""
