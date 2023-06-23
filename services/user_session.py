@@ -22,7 +22,7 @@ class UserSession:
             return
 
         connection = Connection(
-            user=user, book=book, date_added=datetime.now(), page_number=0
+            user=user, book=book, date_added=datetime.now(), page_number=1
         )
         self.session.add(connection)
         self.session.commit()

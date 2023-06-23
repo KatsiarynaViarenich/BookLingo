@@ -178,6 +178,10 @@ class MainWindow(QMainWindow):
             self.user = None
             self.close_book()
             self.ui_page=None
+            self.ui.FavoritelistView.model().clear()
+            self.ui.MyBookslistView.model().clear()
+            self.ui.FoundBookslistView.model().clear()
+
         tab_index = 1
         self.ui.tabWidget.removeTab(tab_index)
         self.ui.tab_account = QWidget()
@@ -205,7 +209,7 @@ class MainWindow(QMainWindow):
         self.ui.tabWidget.setCurrentIndex(self.ui.tabWidget.count() - 1)
 
         self.ui_page.textEdit.setText(book_session_obj.book_pages[book_session_obj.page_number])
-        self.ui_page.PageslineEdit.setText(str(book_session_obj.page_number+1))
+        self.ui_page.PageslineEdit.setText(str(book_session_obj.page_number))
         self.ui_page.closeButton.clicked.connect(self.close_book)
 
         self.ui_page.nextPageButton.clicked.connect(self.next_page)
@@ -221,6 +225,7 @@ class MainWindow(QMainWindow):
         if book.page_number<book.book_pages.__len__()-1:
             print(str(book.page_number))
             book.page_number= book.page_number+1
+            print(book.page_number)
             self.ui_page.textEdit.setText(book.book_pages[book.page_number])
             self.ui_page.PageslineEdit.setText(str(book.page_number))
             print(book.page_number)
@@ -301,7 +306,7 @@ class MainWindow(QMainWindow):
         for book in books:
             book_item = QStandardItem()
             book_item.setData(book)
-            book_item.setText(f"{book.title} - {book.author}")
+            book_item.setText(f"\'{book.title}\' - {book.author}")
             library_model.appendRow(book_item)
 
         self.ui.FoundBookslistView.setModel(library_model)
@@ -314,7 +319,7 @@ class MainWindow(QMainWindow):
         for book in books:
             book_item = QStandardItem()
             book_item.setData(book)
-            book_item.setText(f"{book.title} - {book.author}")
+            book_item.setText(f"\'{book.title}\' - {book.author}")
             my_books_model.appendRow(book_item)
 
         self.ui.MyBookslistView.setModel(my_books_model)
@@ -329,13 +334,12 @@ class MainWindow(QMainWindow):
         book_session_item = self.ui.MyBookslistView.model().itemFromIndex(selected_indexes[0]).data()
         self.user.remove_connection(book_session_item.book_id)
 
-        books = self.user.get_user_books()
+        books = self.user.get_other_books()
         for book in books:
             if book.id==book_session_item.book_id:
                 book_item=QStandardItem()
                 book_item.setData(book)
                 book_item.setText(f"\'{book.title}\' - {book.author}")
-                self.user.remove_connection(book.id)
                 library_model.appendRow(book_item)
                 break
 
