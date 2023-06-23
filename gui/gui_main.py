@@ -276,6 +276,49 @@ class MainWindow(QMainWindow):
         self.ui.delMyBookButton.clicked.connect(self.delete_book)
         self.ui.readMyBookButton.clicked.connect(self.open_book)
         self.ui.delMyQuoteButton.clicked.connect(self.delete_quote)
+        self.ui.findBookButton.clicked.connect(self.filter_library_books)
+        self.ui.findQuoteButton.clicked.connect(self.filter_quotes)
+        self.ui.findMyBookButton.clicked.connect(self.filter_my_books)
+
+    def filter_quotes(self):
+        text = self.ui.findFavoriteplainTextEdit.toPlainText()
+        quote_model = self.ui.FavoritelistView.model()
+        quote_model.clear()
+        quotes = self.user.get_user_quotes(filter_by=text)
+        for quote in quotes:
+            item = QStandardItem()
+            item.setData(quote)
+            item.setText(f"\'{quote.book_id}\' - {quote.quote} - {quote.user_id}")
+            quote_model.appendRow(item)
+        self.ui.FavoritelistView.setModel(quote_model)
+
+    def filter_library_books(self):
+        text = self.ui.findFindBooksplainTextEdit.toPlainText()
+        library_model = self.ui.FoundBookslistView.model()
+        library_model.clear()
+        books = self.user.get_other_books(filter_by=text)
+        print(text)
+        for book in books:
+            book_item = QStandardItem()
+            book_item.setData(book)
+            book_item.setText(f"{book.title} - {book.author}")
+            library_model.appendRow(book_item)
+
+        self.ui.FoundBookslistView.setModel(library_model)
+    def filter_my_books(self):
+        text = self.ui.findMyBookplainTextEdit.toPlainText()
+        my_books_model = self.ui.MyBookslistView.model()
+        my_books_model.clear()
+        print("AAAAAAAAA")
+        books = self.user.get_user_books(filter_by=text)
+        for book in books:
+            book_item = QStandardItem()
+            book_item.setData(book)
+            book_item.setText(f"{book.title} - {book.author}")
+            my_books_model.appendRow(book_item)
+
+        self.ui.MyBookslistView.setModel(my_books_model)
+
 
     def delete_book(self):
         library_model = self.ui.FoundBookslistView.model()

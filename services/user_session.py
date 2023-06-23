@@ -76,7 +76,7 @@ class UserSession:
             .all()
         )
         if filter_by is not None:
-            books = [book for book in books if filter_by in book.title]
+            books = [book for book in books if filter_by.lower() in book.title.lower()]
         return books
 
     def get_other_books(self, sort_by=Book.title, filter_by=None):
@@ -88,7 +88,8 @@ class UserSession:
             .all()
         )
         if filter_by is not None:
-            other_books = [book for book in books if filter_by in book.title]
+            other_books = [book for book in other_books if filter_by.lower() in book.title.lower()]
+        print(len(other_books))
         return other_books
 
     ### OLD CODE ###
@@ -99,8 +100,10 @@ class UserSession:
     # def get_other_books(self):
     #     return self.session.query(Book).join(Connection).filter(Connection.user_id != self.user_id).all()
 
-    def get_user_quotes(self):
+    def get_user_quotes(self, filter_by=None):
         quotes = self.session.query(Quote).filter_by(user_id=self.user_id).all()
+        if filter_by is not None:
+            quotes = [quote for quote in quotes if filter_by.lower() in quote.quote.lower()]
         return quotes
 
     def remove_quotes(self, quote_id):
