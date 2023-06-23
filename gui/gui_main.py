@@ -375,7 +375,7 @@ class MainWindow(QMainWindow):
         from modules.phrase_translation import PhraseTranslation
         PhraseTranslation_obj = PhraseTranslation()
         translation = PhraseTranslation_obj.get_translation(selected_text)
-        QMessageBox.warning(self,"Translation",f" Original text: {selected_text} \n Translated text: {translation}")
+        QMessageBox.information(self,"Translation",f" Original text: {selected_text} \n Translated text: {translation}")
 
     def open_wikipedia(self):
         selected_text = self.ui_page.textEdit.textCursor().selectedText()
