@@ -104,7 +104,11 @@ class UserSession:
         quotes = self.session.query(Quote).filter_by(user_id=self.user_id).all()
         if filter_by is not None:
             quotes = [quote for quote in quotes if filter_by.lower() in quote.quote.lower()]
-        return quotes
+        book_titles = [self.session.query(Book).get(quote.book_id).title for quote in quotes]
+        book_authors = [self.session.query(Book).get(quote.book_id).author for quote in quotes]
+        print(quotes, book_titles, book_authors)
+        return quotes, book_titles, book_authors
+
 
     def remove_quotes(self, quote_id):
         quote = self.session.query(Quote).get(quote_id)

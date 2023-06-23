@@ -269,10 +269,11 @@ class MainWindow(QMainWindow):
         self.ui.MyBookslistView.setSelectionMode(QListView.ExtendedSelection)
 
         quotes_model = QStandardItemModel()
-        for quote in self.user.get_user_quotes():  ##?
+        quotes, book_titles, book_authors = self.user.get_user_quotes()
+        for quote, book_title, book_author in zip(quotes, book_titles, book_authors):
             item = QStandardItem()
             item.setData(quote)
-            item.setText(f"\'{quote.book_id}\' - {quote.quote} - {quote.user_id}")
+            item.setText(f"\'{quote.quote}\' - {book_title} - {book_author}")
             quotes_model.appendRow(item)
         self.ui.FavoritelistView.setModel(quotes_model)
         self.ui.FavoritelistView.setSelectionMode(QListView.ExtendedSelection)
