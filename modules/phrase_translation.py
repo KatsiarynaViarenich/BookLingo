@@ -1,6 +1,10 @@
+from deep_translator import GoogleTranslator
+
+
 class PhraseTranslation:
-    def __init__(self):
-        self.api = "https://api.dictionaryapi.dev/api/v2/entries/en_US/"
+    def __init__(self, target="pl"):
+        self.translator = GoogleTranslator(source="auto", target=target)
 
     def get_translation(self, phrase):
-        return "There will be a translation."
+        translated = self.translator.translate(phrase)
+        return translated

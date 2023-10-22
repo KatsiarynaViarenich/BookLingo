@@ -1,32 +1,33 @@
-from asyncio import sleep
-
+from run_setup import Book, Connection, User
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from run_setup import User, Book, Connection
-from services.user_session import UserSession
+
 from services.authorizing_process import AuthorizingProcess
+from services.user_session import UserSession
 
 
 def main():
     # here is a flow of the program
-    engine = create_engine('sqlite:///../database/app.db')
+    engine = create_engine("sqlite:///../data/app.db")
     Session = sessionmaker(bind=engine)
     session = Session()
 
     authorizing_process = AuthorizingProcess(session)
-    authorizing_process.create_new_account('John', 'password1')
-    authorizing_process.create_new_account('Alice', 'password2')
-    print('Accounts created')
+    authorizing_process.create_new_account("John", "password1")
+    authorizing_process.create_new_account("Alice", "password2")
+    print("Accounts created")
     print()
 
-    if authorizing_process.log_in('John', 'password1') == 'Login successful':
-        print('John logged in')
-        user_session = UserSession(session, session.query(User).filter_by(name='John').first().id)
+    if authorizing_process.log_in("John", "password1") == "Login successful":
+        print("John logged in")
+        user_session = UserSession(
+            session, session.query(User).filter_by(name="John").first().id
+        )
     else:
         return
     print()
 
-    print('John added some books:')
+    print("John added some books:")
     user_session.add_connection(book_id=3)
     user_session.add_connection(book_id=5)
     user_session.add_connection(book_id=1)
@@ -47,7 +48,7 @@ def main():
 
     # filtering by a title:
     print("Here are the Johns books (filtered):")
-    books = user_session.get_user_books(sort_by=Book.title, filter_by='Alice')
+    books = user_session.get_user_books(sort_by=Book.title, filter_by="Alice")
     for book in books:
         print(book.title)
     print()
