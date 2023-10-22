@@ -8,15 +8,48 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QLineEdit, QMainWindow,
-                               QPushButton, QSizePolicy, QTextEdit, QWidget)
+from PySide6.QtCore import (
+    QCoreApplication,
+    QDate,
+    QDateTime,
+    QLocale,
+    QMetaObject,
+    QObject,
+    QPoint,
+    QRect,
+    QSize,
+    Qt,
+    QTime,
+    QUrl,
+)
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QConicalGradient,
+    QCursor,
+    QFont,
+    QFontDatabase,
+    QGradient,
+    QIcon,
+    QImage,
+    QKeySequence,
+    QLinearGradient,
+    QPainter,
+    QPalette,
+    QPixmap,
+    QRadialGradient,
+    QTransform,
+)
+from PySide6.QtWidgets import (
+    QApplication,
+    QFrame,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QSizePolicy,
+    QTextEdit,
+    QWidget,
+)
 
 
 class Ui_PageMainWindow(object):
@@ -56,7 +89,7 @@ class Ui_PageMainWindow(object):
 
         self.addQuoteButton = QPushButton(self.centralwidget)
         self.addQuoteButton.setObjectName("previous page")
-        self.addQuoteButton.setGeometry(QRect(380, 10, 75, 31))  #275, 495, 181, 24
+        self.addQuoteButton.setGeometry(QRect(380, 10, 75, 31))  # 275, 495, 181, 24
         self.addQuoteButton.setStyleSheet(" \n" "    box-shadow: none;")
 
         self.translateButton = QPushButton(self.centralwidget)

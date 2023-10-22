@@ -1,6 +1,5 @@
 import bcrypt
-from sqlalchemy import (Column, DateTime, ForeignKey, Integer, String,
-                        create_engine)
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String, create_engine
 from sqlalchemy.orm import declarative_base, relationship, sessionmaker
 
 engine = create_engine("sqlite:///app.db")

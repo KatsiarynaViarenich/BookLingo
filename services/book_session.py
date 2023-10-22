@@ -17,8 +17,8 @@ def split_book_into_pages(book_path, characters_per_page=1500):
             content = item.get_content()
             soup = BeautifulSoup(content, "html.parser")
             clean_text = soup.get_text(separator=" ")
-            clean_text = re.sub('\n{2,}', '\n', clean_text)
-            clean_text = clean_text.rstrip('\n')
+            clean_text = re.sub("\n{2,}", "\n", clean_text)
+            clean_text = clean_text.rstrip("\n")
             words = clean_text.split()
 
             for word in words:

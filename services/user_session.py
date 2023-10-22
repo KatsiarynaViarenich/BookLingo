@@ -29,7 +29,9 @@ class UserSession:
         print(f"Connection added: User {user.name} <-> Book {book.title}")
 
     def remove_connection(self, book_id):
-        connection_id = self.session.query(Connection).filter_by(book_id=book_id).first().id
+        connection_id = (
+            self.session.query(Connection).filter_by(book_id=book_id).first().id
+        )
         connection = self.session.query(Connection).get(connection_id)
 
         if connection is None:
@@ -88,7 +90,9 @@ class UserSession:
             .all()
         )
         if filter_by is not None:
-            other_books = [book for book in other_books if filter_by.lower() in book.title.lower()]
+            other_books = [
+                book for book in other_books if filter_by.lower() in book.title.lower()
+            ]
         print(len(other_books))
         return other_books
 
@@ -103,12 +107,17 @@ class UserSession:
     def get_user_quotes(self, filter_by=None):
         quotes = self.session.query(Quote).filter_by(user_id=self.user_id).all()
         if filter_by is not None:
-            quotes = [quote for quote in quotes if filter_by.lower() in quote.quote.lower()]
-        book_titles = [self.session.query(Book).get(quote.book_id).title for quote in quotes]
-        book_authors = [self.session.query(Book).get(quote.book_id).author for quote in quotes]
+            quotes = [
+                quote for quote in quotes if filter_by.lower() in quote.quote.lower()
+            ]
+        book_titles = [
+            self.session.query(Book).get(quote.book_id).title for quote in quotes
+        ]
+        book_authors = [
+            self.session.query(Book).get(quote.book_id).author for quote in quotes
+        ]
         print(quotes, book_titles, book_authors)
         return quotes, book_titles, book_authors
-
 
     def remove_quotes(self, quote_id):
         quote = self.session.query(Quote).get(quote_id)

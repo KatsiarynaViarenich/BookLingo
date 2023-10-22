@@ -20,12 +20,9 @@ class QuestionGenerator:
         try:
             output = []
             for passage in passages:
-                result = self.query({
-                            "inputs": passage,
-                        }
-                    )[0][
-                        "generated_text"
-                    ][10:]
+                result = self.query({"inputs": passage,})[0][
+                    "generated_text"
+                ][10:]
                 if result[-1] == "?":
                     output.append(result)
             if output is None:
