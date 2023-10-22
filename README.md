@@ -1,5 +1,4 @@
-# BookLingo README
-*by Katsiaryna Viarenich and Vera Goriukhina*
+# BookLingo *by Katsiaryna Viarenich and Vera Goriukhina*
 -----
 Welcome to our book project, an app designed to enhance your reading experience and to help in learning English. With our app, you can:
 
