@@ -420,7 +420,7 @@ class MainWindow(QMainWindow):
         selected_text = self.ui_page.textEdit.toPlainText()
         QMessageBox.information(
             self,
-            "Hey",
+            "Check your understanding",
             f"Questions:\n{QuestionGenerator().generate_questions(selected_text)}\nFancy words:\n {(fancy_words_generator.get_fancy_words(selected_text))}",
         )
 

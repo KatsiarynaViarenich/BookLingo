@@ -164,7 +164,7 @@ class Ui_PageMainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(
-            QCoreApplication.translate("MainWindow", "Reading", None)
+            QCoreApplication.translate("MainWindow", "BookLingo", None)
         )
         self.AuthorNametextEdit.setHtml(
             QCoreApplication.translate(
